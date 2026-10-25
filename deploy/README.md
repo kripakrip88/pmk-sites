@@ -1,10 +1,9 @@
 # Деплой на VPS
 
-**Сервер:** Beget VPS «Robust Caelum», IP `45.9.41.92`, Ubuntu 24.04, публичный IPv4.
+**Сервер:** Beget VPS «Robust Caelum», IP `45.9.41.92`, Ubuntu 26.04, 1 ГБ RAM + 1 ГБ swap, публичный IPv4.
 Вход только по SSH-ключу (`ssh root@45.9.41.92`), пароли в репо не хранить. ERP-сервер не трогаем.
 
 Настраивать из локальной сессии: из облачной сессии Claude порт 22 недоступен.
-⚠ Схема ещё не проверялась на живом сервере — первый запуск делать вместе.
 
 ## 0. Ключ (один раз, на своём компьютере)
 
@@ -13,15 +12,26 @@
 ssh-copy-id -i ~/.ssh/id_ed25519.pub root@45.9.41.92
 ```
 
-Затем на сервере отключить вход по паролю (`PasswordAuthentication no` в
-`/etc/ssh/sshd_config.d/`) и сменить пароль root (`passwd`).
+Затем на сервере отключить вход по паролю и сменить пароль root (`passwd`).
+Файл `50-cloud-init.conf` включает пароль, а в sshd побеждает первое значение — поэтому
+запрет кладём в файл, который читается раньше:
+
+```bash
+printf 'PasswordAuthentication no\nKbdInteractiveAuthentication no\nPermitRootLogin prohibit-password\n' \
+  > /etc/ssh/sshd_config.d/01-pmk-hardening.conf
+sshd -t && systemctl reload ssh && sshd -T | grep passwordauthentication   # → no
+```
 
 ## 1. Сервер
 
 ```bash
+# swap: без него сборка на 1 ГБ RAM может упасть
+fallocate -l 1G /swapfile && chmod 600 /swapfile && mkswap /swapfile && swapon /swapfile
+echo '/swapfile none swap sw 0 0' >> /etc/fstab
+ufw allow OpenSSH && ufw allow 80/tcp && ufw allow 443/tcp && ufw --force enable
 apt update && apt install -y docker.io docker-compose-v2 git nodejs npm
-git clone git@github.com:kripakrip88/pmk-sites.git /opt/pmk-sites
-cd /opt/pmk-sites && cp .env.example .env   # заполнить
+git clone https://github.com/kripakrip88/pmk-sites.git /opt/pmk-sites   # репо публичное
+cd /opt/pmk-sites && cp .env.example .env   # заполнить; LEADS_EMAIL= пусто — письма не шлём
 ```
 
 ## 2. DNS (панель Beget)
@@ -33,7 +43,7 @@ cd /opt/pmk-sites && cp .env.example .env   # заполнить
 
 ```bash
 npm ci && npm run build:all
-TLS=0 npm run nginx          # только http, чтобы Let's Encrypt мог проверить домен
+TLS=0 npm run nginx          # только http: сайт открывается, Let's Encrypt может проверить домен
 docker compose up -d --build
 ```
 

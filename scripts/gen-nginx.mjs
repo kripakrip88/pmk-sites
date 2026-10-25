@@ -12,14 +12,16 @@ const sites = readdirSync(new URL('sites/', root), { withFileTypes: true })
 const block = (s) => {
   const host = domainToASCII(s.domain);
   const cert = `/etc/letsencrypt/live/${host}`;
-  // TLS=0 — только http: первый запуск, пока Let's Encrypt не выдал сертификаты
+  // TLS=0 — только http: первый запуск, пока Let's Encrypt не выдал сертификаты.
+  // Сайт тогда отдаётся прямо по http, чтобы прототип можно было открыть.
   const tls = process.env.TLS !== '0';
   return `# ${s.domain}
 server {
     listen 80;
     server_name ${host} www.${host};
     location /.well-known/acme-challenge/ { root /var/www/certbot; }
-    location / { return 301 https://${host}$request_uri; }
+${tls ? `    location / { return 301 https://${host}$request_uri; }` : `    root /srv/sites/${s.slug};
+    include /etc/nginx/snippets/pmk-site.conf;`}
 }
 ${tls ? `server {
     listen 443 ssl;
