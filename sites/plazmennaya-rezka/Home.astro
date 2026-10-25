@@ -1,6 +1,7 @@
 ---
-// Посадочная «Плазмореза» — композиция по мотивам zeepay: герой + «пульт», бенто, шаги, сравнение, вопросы, полоса с формой.
+// Посадочная «Плазмореза» — композиция по мотивам zeepay: герой + «пульт», бенто, шаги, «Что режем», вопросы, полоса с формой.
 import Panel from './Panel.astro';
+import Part from './Part.astro';
 import LeadForm from './LeadForm.astro';
 import { Content as Text } from './text.md';
 import site, { phoneHref } from '../../src/lib/site.js';
@@ -21,7 +22,7 @@ const icons: Record<string, string> = {
       <p class="hero__lead">{site.hero.lead}</p>
       <div class="hero__btns">
         <a class="btn btn--plasma" href="#lead">Отправить чертёж <span aria-hidden="true">→</span></a>
-        <a class="btn btn--ghost" href="#compare">Плазма или лазер?</a>
+        <a class="btn btn--ghost" href="#parts">Что режем</a>
       </div>
       <ul class="hero__chips">
         {site.hero.chips.map((c) => <li><svg viewBox="0 0 20 20" width="16" height="16" aria-hidden="true"><path d="M4 10.5l4 4 8-9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" /></svg>{c}</li>)}
@@ -77,23 +78,18 @@ const icons: Record<string, string> = {
   </div>
 </section>
 
-<section class="sec" id="compare">
+<section class="sec" id="parts">
   <div class="wrap">
-    <div class="sec__head"><h2>{site.compare.title}</h2><p>{site.compare.lead}</p></div>
-    <div class="cmp" role="table" aria-label={site.compare.title}>
-      <div class="cmp__row cmp__head" role="row">
-        <span role="columnheader"></span>
-        <span role="columnheader" class="cmp__p">Плазма</span>
-        <span role="columnheader">Лазер</span>
-      </div>
-      {site.compare.rows.map(([k, p, l]) => (
-        <div class="cmp__row" role="row">
-          <span role="rowheader" class="cmp__k">{k}</span>
-          <span role="cell" class="cmp__p">{p}</span>
-          <span role="cell">{l}</span>
-        </div>
+    <div class="sec__head"><h2>{site.parts.title}</h2><p>{site.parts.lead}</p></div>
+    <ul class="parts">
+      {site.parts.items.map(([key, h, p]) => (
+        <li class="pt">
+          <Part kind={key} />
+          <h3>{h}</h3>
+          <p>{p}</p>
+        </li>
       ))}
-    </div>
+    </ul>
   </div>
 </section>
 
@@ -176,21 +172,13 @@ const icons: Record<string, string> = {
   .st p { color: var(--muted); }
   @media (max-width: 860px) { .steps { grid-template-columns: minmax(0, 1fr); } }
 
-  .cmp { background: var(--card); border-radius: var(--r-lg); border: 1px solid var(--line); overflow: hidden; }
-  .cmp__row { display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1fr) minmax(0, 1fr); }
-  .cmp__row > span { padding: 18px 24px; border-top: 1px solid var(--line); }
-  .cmp__head > span { border-top: 0; font: 600 18px/1.2 var(--f-head); }
-  .cmp__k { font-weight: 600; }
-  .cmp__p { background: var(--plasma-tint); color: var(--ink); }
-  .cmp__head .cmp__p { background: var(--plasma); color: #fff; }
-  .cmp__row > span:last-child { color: var(--muted); }
-  .cmp__head > span:last-child { color: var(--ink); }
-  @media (max-width: 640px) {
-    .cmp__row { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
-    .cmp__k { grid-column: 1 / -1; background: var(--bg); padding: 12px 16px !important; }
-    .cmp__head > span:first-child { display: none; }
-    .cmp__row > span { padding: 14px 16px; font-size: 15px; }
-  }
+  .parts { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; }
+  .pt { background: var(--card); border: 1px solid var(--line); border-radius: var(--r-lg); padding: 24px; display: grid; gap: 8px; align-content: start; transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s; }
+  .pt p { color: var(--muted); font-size: 15px; }
+  .pt h3 { font-size: 18px; margin-top: 8px; }
+  .pt:hover { border-color: #c9c3ff; transform: translateY(-3px); box-shadow: var(--shadow); }
+  @media (max-width: 1020px) { .parts { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 520px) { .parts { gap: 12px; } .pt { padding: 18px; } .pt h3 { font-size: 16px; } .pt p { font-size: 14px; } }
 
   .faq { display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); gap: 48px; align-items: start; }
   .faq__intro { display: grid; gap: 16px; justify-items: start; position: sticky; top: 100px; }

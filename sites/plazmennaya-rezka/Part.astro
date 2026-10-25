@@ -1,0 +1,37 @@
+---
+// Силуэт детали, как на раскрое: контур с отверстиями (evenodd). При наведении на карточку
+// по контуру проходит рез — светлая дуга плазмы.
+interface Props { kind: string }
+const { kind } = Astro.props;
+
+const circle = (cx: number, cy: number, r: number) => `M${cx - r} ${cy}a${r} ${r} 0 1 0 ${2 * r} 0a${r} ${r} 0 1 0 ${-2 * r} 0z`;
+const bolts = (cx: number, cy: number, R: number, n: number, r: number) =>
+  Array.from({ length: n }, (_, i) => circle(+(cx + R * Math.cos((2 * Math.PI * i) / n)).toFixed(2), +(cy + R * Math.sin((2 * Math.PI * i) / n)).toFixed(2), r)).join('');
+
+const shapes: Record<string, { outer: string; holes?: string }> = {
+  flange: { outer: circle(48, 36, 30), holes: circle(48, 36, 12) + bolts(48, 36, 21, 8, 2.6) },
+  gusset: { outer: 'M18 10h8l52 44v8H18z', holes: circle(25, 54, 2.8) + circle(64, 56, 2.8) },
+  base: { outer: 'M20 8h56v56H20z', holes: circle(28, 16, 3.2) + circle(68, 16, 3.2) + circle(28, 56, 3.2) + circle(68, 56, 3.2) + circle(48, 36, 7) },
+  rib: { outer: 'M10 52h76l-14-34H24z', holes: circle(30, 40, 2.6) + circle(66, 40, 2.6) },
+  ring: { outer: circle(48, 36, 30), holes: circle(48, 36, 19) },
+  embed: { outer: 'M14 18h68v36H14z', holes: circle(26, 36, 4) + circle(70, 36, 4) + 'M42 30h12v12H42z' },
+  blank: { outer: 'M10 20h76v32H10z', holes: circle(18, 36, 2.4) + circle(78, 36, 2.4) },
+  custom: { outer: 'M14 50V22l14-10h26a20 20 0 0 1 20 20v4l8 6v8z', holes: circle(30, 30, 5) + 'M52 26h12v6H52z' + circle(70, 44, 2.4) },
+};
+const s = shapes[kind] ?? shapes.custom;
+---
+<svg class="part" viewBox="0 0 96 72" width="96" height="72" aria-hidden="true">
+  <path class="part__body" d={s.outer + (s.holes ?? '')} fill-rule="evenodd" />
+  {kind === 'blank' && <path d="M32 20v32M64 20v32" class="part__bend" />}
+  <path class="part__cut" d={s.outer} pathLength="1" />
+</svg>
+
+<style>
+  .part { width: 96px; height: 72px; overflow: visible; }
+  .part__body { fill: var(--plasma-tint); stroke: #8f86ff; stroke-width: 1.4; stroke-linejoin: round; transition: stroke 0.2s; }
+  .part__bend { stroke: #8f86ff; stroke-width: 1.2; stroke-dasharray: 3 3; fill: none; }
+  .part__cut { fill: none; stroke: var(--plasma); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 0.12 1; stroke-dashoffset: 0.12; opacity: 0; }
+  :global(.pt:hover) .part__body { stroke: var(--plasma); }
+  :global(.pt:hover) .part__cut { opacity: 1; animation: part-cut 1.4s linear infinite; }
+  @keyframes part-cut { from { stroke-dashoffset: 0.12; } to { stroke-dashoffset: -0.88; } }
+</style>
