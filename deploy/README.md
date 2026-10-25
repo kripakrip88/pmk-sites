@@ -43,7 +43,7 @@ cd /opt/pmk-sites && cp .env.example .env   # заполнить; LEADS_EMAIL= �
 
 ```bash
 npm ci && npm run build:all
-TLS=0 npm run nginx          # только http: сайт открывается, Let's Encrypt может проверить домен
+npm run nginx                # https только у сайтов с сертификатом, остальные — по http
 docker compose up -d --build
 ```
 
@@ -53,8 +53,11 @@ docker compose up -d --build
 for d in $(node -e "const fs=require('fs'),u=require('url');for(const s of fs.readdirSync('sites'))if(!s.startsWith('_'))console.log(u.domainToASCII(JSON.parse(fs.readFileSync('sites/'+s+'/site.json')).domain))"); do
   docker compose run --rm certbot certonly --webroot -w /var/www/certbot -d $d -d www.$d --agree-tos -m pmkpark@mail.ru -n
 done
-npm run nginx && docker compose restart nginx
+npm run nginx && docker compose exec nginx nginx -t && docker compose exec nginx nginx -s reload
 ```
+
+`gen-nginx` сам включает https у сайта, когда в томе `pmk-sites_certs` появился его сертификат
+(`TLS=0` — всем только http, `TLS=1` — всем https). Запрос по IP сбрасывается (444).
 
 Продление — cron раз в сутки:
 `docker compose run --rm certbot renew -q && docker compose exec nginx nginx -s reload`.
