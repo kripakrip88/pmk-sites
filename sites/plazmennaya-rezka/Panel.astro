@@ -1,0 +1,78 @@
+---
+// «Пульт»: карточка задания на резку. Наверху — фланец, по контуру которого идёт дуга плазмы.
+import site from '../../src/lib/site.js';
+const j = site.job;
+const mark = { done: 'Готово', run: 'Режем', wait: 'В очереди' } as Record<string, string>;
+---
+<div class="pn" aria-hidden="true">
+  <div class="pn__top">
+    <div class="pn__row">
+      <span class="pn__label">{j.title}</span>
+      <span class="pn__live"><i></i>станок в работе</span>
+    </div>
+    <div class="pn__main">
+      <div>
+        <div class="pn__k">Толщина</div>
+        <div class="pn__big">{j.thickness}</div>
+        <div class="pn__k">{j.material}</div>
+      </div>
+      <svg class="pn__part" viewBox="0 0 120 120" width="120" height="120">
+        <circle cx="60" cy="60" r="50" fill="none" stroke="rgba(255,255,255,.28)" stroke-width="2" stroke-dasharray="4 4" />
+        <circle cx="60" cy="60" r="18" fill="none" stroke="rgba(255,255,255,.28)" stroke-width="2" />
+        {[0, 60, 120, 180, 240, 300].map((a) => (
+          <circle cx={60 + 35 * Math.cos((a * Math.PI) / 180)} cy={60 + 35 * Math.sin((a * Math.PI) / 180)} r="5" fill="none" stroke="rgba(255,255,255,.28)" stroke-width="2" />
+        ))}
+        <g class="pn__arc">
+          <circle cx="60" cy="60" r="50" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="0 244 70.2 10" transform="rotate(-90 60 60)" />
+          <circle cx="60" cy="10" r="7" fill="rgba(201,195,255,.45)" />
+          <circle cx="60" cy="10" r="3.2" fill="#fff" />
+          <circle class="pn__spark" cx="66" cy="8" r="1.4" fill="var(--spark)" />
+        </g>
+      </svg>
+    </div>
+    <div class="pn__bar"><span style={`width:${j.progress}%`}></span></div>
+    <div class="pn__k">Выполнено {j.progress}%</div>
+  </div>
+  <ul class="pn__list">
+    {j.rows.map(([name, qty, st]) => (
+      <li>
+        <span class={`pn__st pn__st--${st}`}></span>
+        <span class="pn__name">{name}</span>
+        <span class="pn__qty">{qty}</span>
+        <span class={`pn__tag pn__tag--${st}`}>{mark[st]}</span>
+      </li>
+    ))}
+  </ul>
+</div>
+
+<style>
+  .pn { background: var(--card); border-radius: var(--r-lg); box-shadow: var(--shadow); padding: 14px; width: 100%; max-width: 420px; }
+  .pn__top { background: var(--plasma); color: #fff; border-radius: 18px; padding: 20px 22px 18px; }
+  .pn__row { display: flex; justify-content: space-between; align-items: center; gap: 12px; font-size: 14px; }
+  .pn__label { font-weight: 600; }
+  .pn__live { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: rgba(255, 255, 255, 0.85); }
+  .pn__live i { width: 8px; height: 8px; border-radius: 50%; background: var(--spark); box-shadow: 0 0 0 3px rgba(255, 178, 26, 0.3); animation: pn-blink 1.6s ease-in-out infinite; }
+  .pn__main { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin: 14px 0 16px; }
+  .pn__k { font-size: 13px; color: rgba(255, 255, 255, 0.75); }
+  .pn__big { font: 600 44px/1.05 var(--f-head); letter-spacing: -0.03em; margin: 2px 0 4px; }
+  .pn__part { flex: none; }
+  .pn__arc { transform-origin: 60px 60px; animation: pn-cut 7s linear infinite; }
+  .pn__spark { animation: pn-spark 0.5s ease-out infinite; }
+  .pn__bar { height: 6px; border-radius: 6px; background: rgba(255, 255, 255, 0.22); overflow: hidden; margin-bottom: 8px; }
+  .pn__bar span { display: block; height: 100%; border-radius: 6px; background: #fff; }
+  .pn__list { list-style: none; margin: 0; padding: 8px 6px 2px; }
+  .pn__list li { display: grid; grid-template-columns: auto minmax(0, 1fr) auto auto; align-items: center; gap: 10px; padding: 12px 4px; font-size: 15px; }
+  .pn__list li + li { border-top: 1px solid var(--line); }
+  .pn__st { width: 10px; height: 10px; border-radius: 50%; background: var(--line); }
+  .pn__st--done { background: #22a06b; }
+  .pn__st--run { background: var(--plasma); box-shadow: 0 0 0 4px var(--plasma-tint); }
+  .pn__name { font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .pn__qty { color: var(--muted); font-size: 14px; }
+  .pn__tag { font-size: 12px; font-weight: 600; padding: 4px 8px; border-radius: 8px; background: #f0f1f7; color: var(--muted); }
+  .pn__tag--done { background: #e3f6ec; color: #136c45; }
+  .pn__tag--run { background: var(--plasma-tint); color: var(--plasma-dark); }
+  @keyframes pn-cut { to { transform: rotate(360deg); } }
+  @keyframes pn-spark { from { opacity: 1; transform: translate(0, 0); } to { opacity: 0; transform: translate(5px, -4px); } }
+  @keyframes pn-blink { 50% { opacity: 0.35; } }
+  @media (max-width: 400px) { .pn__big { font-size: 36px; } .pn__part { width: 96px; height: 96px; } }
+</style>

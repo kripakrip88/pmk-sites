@@ -1,0 +1,101 @@
+---
+import './styles.css';
+import Head from '../../src/components/Head.astro';
+import Logo from './Logo.astro';
+import site, { phoneHref } from '../../src/lib/site.js';
+
+interface Props { title: string; description: string; noindex?: boolean; schema?: object[] }
+const props = Astro.props;
+const home = Astro.url.pathname === '/';
+const to = (hash: string) => (home ? hash : '/' + hash);
+const c = site.contacts;
+const year = new Date().getFullYear();
+---
+<!doctype html>
+<html lang="ru">
+  <head>
+    <Head {...props} />
+    <meta name="theme-color" content="#f3f4fb" />
+  </head>
+  <body>
+    <header class="hdr">
+      <div class="wrap hdr__in">
+        <a class="hdr__logo" href="/" aria-label={`${site.brand.name} — ${site.brand.tagline}, на главную`}><Logo /></a>
+        <nav class="hdr__nav" aria-label="Разделы">
+          <a href={to('#thickness')}>Толщины</a>
+          <a href={to('#steps')}>Как работаем</a>
+          <a href={to('#compare')}>Плазма или лазер</a>
+          <a href={to('#faq')}>Вопросы</a>
+        </nav>
+        <a class="hdr__phone" href={phoneHref} aria-label={`Позвонить: ${c.phone}`}>
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 3h4l2 5-2.5 1.5a11 11 0 0 0 6 6L16 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 5a2 2 0 0 1 2-2"/></svg>
+          <span>{c.phone}</span>
+        </a>
+        <a class="btn btn--plasma btn--sm" href={to('#lead')}>Рассчитать</a>
+      </div>
+    </header>
+
+    <main><slot /></main>
+
+    <footer class="ftr">
+      <div class="wrap ftr__in">
+        <div class="ftr__brand">
+          <Logo />
+          <p>{site.service} {site.cityIn}: толстый лист, детали для металлоконструкций, резка по чертежу.</p>
+        </div>
+        <div>
+          <h3 class="ftr__h">Разделы</h3>
+          <a href={to('#thickness')}>Толщины</a>
+          <a href={to('#steps')}>Как работаем</a>
+          <a href={to('#compare')}>Плазма или лазер</a>
+          <a href={to('#faq')}>Вопросы</a>
+        </div>
+        <div>
+          <h3 class="ftr__h">Связаться</h3>
+          <a href={phoneHref}>{c.phone}</a>
+          <span>{c.hours}</span>
+          {c.whatsapp && <a href={c.whatsapp} target="_blank" rel="noopener">WhatsApp</a>}
+          {c.telegram && <a href={c.telegram} target="_blank" rel="noopener">Telegram</a>}
+        </div>
+        <div>
+          <h3 class="ftr__h">Производство</h3>
+          <span>{c.address}</span>
+          {c.email && <a href={`mailto:${c.email}`}>{c.email}</a>}
+        </div>
+      </div>
+      <div class="wrap ftr__bottom">
+        <span>© {year} {site.brand.name}</span>
+        <a href="/politika/">Политика обработки персональных данных</a>
+        <span>Не является публичной офертой</span>
+      </div>
+    </footer>
+  </body>
+</html>
+
+<style>
+  .hdr { position: sticky; top: 0; z-index: 40; background: rgba(243, 244, 251, 0.9); backdrop-filter: blur(10px); border-bottom: 1px solid transparent; }
+  .hdr__in { display: flex; align-items: center; gap: 28px; height: 72px; }
+  .hdr__logo { margin-right: auto; text-decoration: none; }
+  .hdr__nav { display: flex; gap: 26px; font-size: 15px; font-weight: 500; }
+  .hdr__nav a { text-decoration: none; color: var(--muted); }
+  .hdr__nav a:hover { color: var(--plasma); }
+  .hdr__phone { display: flex; align-items: center; gap: 8px; font-weight: 600; text-decoration: none; white-space: nowrap; }
+  @media (max-width: 1020px) { .hdr__nav { display: none; } }
+  @media (max-width: 640px) {
+    .hdr__in { gap: 10px; height: 64px; }
+    .hdr__phone span { display: none; }
+    .hdr__phone { width: 42px; height: 42px; justify-content: center; border-radius: 10px; background: var(--card); box-shadow: inset 0 0 0 1px var(--line); }
+  }
+
+  .ftr { background: var(--card); border-top: 1px solid var(--line); padding: 56px 0 28px; font-size: 15px; }
+  .ftr__in { display: grid; grid-template-columns: minmax(0, 1.6fr) repeat(3, minmax(0, 1fr)); gap: 32px; padding-bottom: 40px; }
+  .ftr__in > div { display: grid; gap: 8px; align-content: start; }
+  .ftr__brand p { color: var(--muted); max-width: 320px; margin-top: 8px; }
+  .ftr__h { font: 600 15px/1.2 var(--f-head); margin-bottom: 4px; }
+  .ftr a { text-decoration: none; color: var(--muted); }
+  .ftr a:hover { color: var(--plasma); }
+  .ftr span { color: var(--muted); }
+  .ftr__bottom { position: relative; display: flex; flex-wrap: wrap; gap: 8px 28px; padding-top: 24px; font-size: 13px; }
+  .ftr__bottom::before { content: ''; position: absolute; top: 0; left: var(--pad); right: var(--pad); height: 1px; background: var(--line); }
+  @media (max-width: 860px) { .ftr__in { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } .ftr__brand { grid-column: 1 / -1; } }
+</style>

@@ -1,0 +1,74 @@
+/* «Плазморез» — плазменная-резка-хабаровск.рф
+   Концепция «Пульт» (композиция по мотивам темы zeepay, код свой): холодный светлый фон, крупный
+   заголовок + карточка «задания на резку» с живой дугой, бенто-сетка, сравнение, тёмная полоса с формой.
+   Скругления крупные (16–24px), мягкие тени. */
+@import '@fontsource/geologica/cyrillic-500.css';
+@import '@fontsource/geologica/latin-500.css';
+@import '@fontsource/geologica/cyrillic-600.css';
+@import '@fontsource/geologica/latin-600.css';
+@import '@fontsource/golos-text/cyrillic-400.css';
+@import '@fontsource/golos-text/latin-400.css';
+@import '@fontsource/golos-text/cyrillic-500.css';
+@import '@fontsource/golos-text/latin-500.css';
+@import '@fontsource/golos-text/cyrillic-600.css';
+@import '@fontsource/golos-text/latin-600.css';
+
+:root {
+  --bg: #f3f4fb;         /* холодный светлый */
+  --card: #ffffff;
+  --ink: #0e1330;        /* тёмный индиго */
+  --muted: #5a607a;
+  --line: #e2e4f0;
+  --plasma: #4b3cff;     /* дуга */
+  --plasma-dark: #3a2ce0;
+  --plasma-tint: #ecebff;
+  --spark: #ffb21a;      /* искра — только мелкие акценты */
+  --night: #14104a;      /* тёмная полоса */
+
+  --f-head: 'Geologica', 'Arial', sans-serif;
+  --f-text: 'Golos Text', -apple-system, 'Segoe UI', Arial, sans-serif;
+
+  --r: 16px;
+  --r-lg: 24px;
+  --maxw: 1200px;
+  --pad: 32px;
+  --shadow: 0 1px 2px rgba(14, 19, 48, 0.05), 0 16px 40px rgba(14, 19, 48, 0.08);
+}
+@media (max-width: 640px) { :root { --pad: 16px; } }
+
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; scroll-padding-top: 80px; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 400 17px/1.6 var(--f-text); -webkit-font-smoothing: antialiased; }
+h1, h2, h3 { margin: 0; font-family: var(--f-head); font-weight: 600; line-height: 1.12; letter-spacing: -0.02em; }
+h2 { font-size: clamp(28px, 3.4vw, 44px); }
+h3 { font-size: 20px; letter-spacing: -0.01em; }
+p { margin: 0; }
+a { color: inherit; }
+svg { display: block; }
+:focus-visible { outline: 2px solid var(--plasma); outline-offset: 3px; }
+
+.wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 var(--pad); }
+.sec { padding: 96px 0; }
+.sec__head { max-width: 680px; margin-bottom: 48px; }
+.sec__head p { color: var(--muted); margin-top: 16px; font-size: 18px; }
+@media (max-width: 640px) { .sec { padding: 64px 0; } .sec__head { margin-bottom: 32px; } }
+
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  font: 600 16px/1 var(--f-text); padding: 16px 24px; border-radius: 12px; border: 0;
+  cursor: pointer; text-decoration: none; white-space: nowrap; transition: background 0.15s, box-shadow 0.15s, color 0.15s;
+}
+.btn--plasma { background: var(--plasma); color: #fff; box-shadow: 0 8px 20px rgba(75, 60, 255, 0.28); }
+.btn--plasma:hover { background: var(--plasma-dark); }
+.btn--ghost { background: var(--card); color: var(--ink); box-shadow: inset 0 0 0 1px var(--line); }
+.btn--ghost:hover { box-shadow: inset 0 0 0 1px var(--plasma); color: var(--plasma); }
+.btn--sm { padding: 11px 16px; font-size: 15px; border-radius: 10px; }
+
+/* страницы-документы: политика, 404 */
+.legal { max-width: 760px; margin: 0 auto; padding: 72px var(--pad) 96px; }
+.legal h1 { font-size: clamp(26px, 4vw, 40px); margin-bottom: 28px; }
+.legal h2 { font-size: 19px; margin: 28px 0 8px; }
+.legal p { color: #3b4160; }
+.legal a { color: var(--plasma); text-underline-offset: 3px; }
+
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { animation: none !important; transition: none !important; } }
