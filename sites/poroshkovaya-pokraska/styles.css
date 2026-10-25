@@ -1,0 +1,86 @@
+/* «Палитра ДВ» — порошковая-покраска-хабаровск.рф
+   Концепция «Палитра» (композиция по мотивам темы Astro Rocket, MIT): первый экран — градиент
+   от цвета RAL к графиту, образцы RAL перекрашивают акцент всего сайта (--ral). Плавающее меню-таблетка,
+   метки разделов, карточки по центру. Скругления 12–24px. */
+@import '@fontsource/rubik/cyrillic-500.css';
+@import '@fontsource/rubik/latin-500.css';
+@import '@fontsource/rubik/cyrillic-600.css';
+@import '@fontsource/rubik/latin-600.css';
+@import '@fontsource/rubik/cyrillic-700.css';
+@import '@fontsource/rubik/latin-700.css';
+@import '@fontsource/commissioner/cyrillic-400.css';
+@import '@fontsource/commissioner/latin-400.css';
+@import '@fontsource/commissioner/cyrillic-500.css';
+@import '@fontsource/commissioner/latin-500.css';
+@import '@fontsource/commissioner/cyrillic-600.css';
+@import '@fontsource/commissioner/latin-600.css';
+
+:root {
+  /* выбранный RAL; JS подменяет --ral, --ral-ink (текст на нём) и --ral-accent (акцент на белом) */
+  --ral: #c1121c;
+  --ral-ink: #ffffff;
+  --ral-accent: #c1121c;
+  --ral-soft: color-mix(in srgb, var(--ral-accent) 9%, #fff);
+  --ral-line: color-mix(in srgb, var(--ral-accent) 22%, #fff);
+
+  --graphite: #101114;   /* низ градиента, подвал призыва */
+  --ink: #17181c;
+  --muted: #5e6069;
+  --bg: #f6f6f4;
+  --card: #ffffff;
+  --line: #e6e6e2;
+
+  --f-head: 'Rubik', 'Arial', sans-serif;
+  --f-text: 'Commissioner', -apple-system, 'Segoe UI', Arial, sans-serif;
+
+  --r: 12px;
+  --r-lg: 24px;
+  --maxw: 1120px;
+  --pad: 32px;
+}
+@media (max-width: 640px) { :root { --pad: 16px; } }
+
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; scroll-padding-top: 96px; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 400 17px/1.6 var(--f-text); -webkit-font-smoothing: antialiased; }
+h1, h2, h3 { margin: 0; font-family: var(--f-head); font-weight: 700; line-height: 1.1; letter-spacing: -0.02em; }
+h2 { font-size: clamp(30px, 3.6vw, 46px); }
+h3 { font-size: 19px; font-weight: 600; letter-spacing: -0.01em; }
+p { margin: 0; }
+a { color: inherit; }
+svg { display: block; }
+:focus-visible { outline: 2px solid var(--ral-accent); outline-offset: 3px; }
+
+.wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 var(--pad); }
+.sec { padding: 96px 0; }
+.sec--white { background: var(--card); }
+.sec__head { text-align: center; max-width: 680px; margin: 0 auto 48px; display: grid; justify-items: center; gap: 14px; }
+.sec__head p { color: var(--muted); font-size: 18px; }
+@media (max-width: 640px) { .sec { padding: 64px 0; } .sec__head { margin-bottom: 32px; } }
+
+/* метка-таблетка над заголовком раздела */
+.pill { display: inline-flex; align-items: center; gap: 6px; font: 600 13px/1 var(--f-text); padding: 7px 12px; border-radius: 999px; background: var(--ral-soft); color: var(--ral-accent); border: 1px solid var(--ral-line); }
+.pill::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--ral-accent); }
+
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  font: 600 16px/1 var(--f-text); padding: 15px 22px; border-radius: 10px; border: 0;
+  cursor: pointer; text-decoration: none; white-space: nowrap; transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+}
+.btn--ral { background: var(--ral-accent); color: #fff; }
+.btn--ral:hover { background: color-mix(in srgb, var(--ral-accent) 85%, #000); }
+.btn--white { background: #fff; color: var(--ink); }
+.btn--white:hover { background: #ececec; }
+.btn--glass { background: rgba(255, 255, 255, 0.08); color: #fff; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.35); }
+.btn--glass:hover { background: rgba(255, 255, 255, 0.16); }
+.btn--line { background: var(--card); color: var(--ral-accent); box-shadow: inset 0 0 0 1px var(--ral-line); }
+.btn--line:hover { background: var(--ral-soft); }
+
+/* страницы-документы: политика, 404 */
+.legal { max-width: 760px; margin: 0 auto; padding: 140px var(--pad) 96px; }
+.legal h1 { font-size: clamp(26px, 4vw, 40px); margin-bottom: 28px; }
+.legal h2 { font-size: 19px; margin: 28px 0 8px; }
+.legal p { color: #3d3f47; }
+.legal a { color: var(--ral-accent); text-underline-offset: 3px; }
+
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { transition: none !important; animation: none !important; } }

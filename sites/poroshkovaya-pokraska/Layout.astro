@@ -1,0 +1,143 @@
+---
+import './styles.css';
+import Head from '../../src/components/Head.astro';
+import Logo from './Logo.astro';
+import site, { phoneHref } from '../../src/lib/site.js';
+
+interface Props { title: string; description: string; noindex?: boolean; schema?: object[] }
+const props = Astro.props;
+const home = Astro.url.pathname === '/';
+const to = (hash: string) => (home ? hash : '/' + hash);
+const c = site.contacts;
+const year = new Date().getFullYear();
+const ral = Object.fromEntries(site.ral.map(([n, name, hex]) => [n, [name, hex]]));
+const ralDefault = site.ral[0][0]; // ключи-номера браузер сортирует по возрастанию — первый берём явно
+---
+<!doctype html>
+<html lang="ru">
+  <head>
+    <Head {...props} />
+    <meta name="theme-color" content="#101114" />
+    <!-- Перекраска сайта в выбранный RAL: до отрисовки, чтобы не мигало. Выбор помним в браузере. -->
+    <script is:inline define:vars={{ ral, ralDefault }}>
+      (function () {
+        const root = document.documentElement;
+        function lum(hex) {
+          const c = [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16) / 255).map((v) => (v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4));
+          return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2];
+        }
+        window.pmkSetRal = function (num, save) {
+          const r = ral[num];
+          if (!r) return;
+          const [name, hex] = r;
+          const L = lum(hex);
+          root.style.setProperty('--ral', hex);
+          root.style.setProperty('--ral-ink', L > 0.4 ? '#17181c' : '#ffffff');
+          // светлый RAL на белом не виден — для ссылок и кнопок берём его затемнённым
+          root.style.setProperty('--ral-accent', L > 0.3 ? `color-mix(in srgb, ${hex} 50%, #000)` : hex);
+          root.dataset.ral = num;
+          document.querySelectorAll('[data-ral]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.ral === num)));
+          document.querySelectorAll('[data-ral-label]').forEach((el) => { el.textContent = `RAL ${num} · ${name}`; });
+          if (save) { try { localStorage.setItem('pmk-ral', num); } catch (e) {} }
+        };
+        let saved = null;
+        try { saved = localStorage.getItem('pmk-ral'); } catch (e) {}
+        if (saved && ral[saved]) window.pmkSetRal(saved, false);
+        document.addEventListener('click', (e) => {
+          const b = e.target.closest && e.target.closest('[data-ral]');
+          if (b) window.pmkSetRal(b.dataset.ral, true);
+        });
+        document.addEventListener('DOMContentLoaded', () => window.pmkSetRal(root.dataset.ral || ralDefault, false));
+      })();
+    </script>
+  </head>
+  <body>
+    <header class="nav">
+      <div class="nav__in">
+        <a class="nav__logo" href="/" aria-label={`${site.brand.name} — ${site.brand.tagline}, на главную`}><Logo light /></a>
+        <nav class="nav__links" aria-label="Разделы">
+          <a href={to('#what')}>Что красим</a>
+          <a href={to('#steps')}>Как красим</a>
+          <a href={to('#palette')}>Цвета RAL</a>
+          <a href={to('#faq')}>Вопросы</a>
+        </nav>
+        <a class="nav__phone" href={phoneHref} aria-label={`Позвонить: ${c.phone}`}>
+          <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 3h4l2 5-2.5 1.5a11 11 0 0 0 6 6L16 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 5a2 2 0 0 1 2-2"/></svg>
+          <span>{c.phone}</span>
+        </a>
+        <a class="nav__cta" href={to('#lead')}>Рассчитать</a>
+      </div>
+    </header>
+
+    <main><slot /></main>
+
+    <footer class="ftr">
+      <div class="wrap ftr__in">
+        <div class="ftr__brand">
+          <Logo />
+          <p>{site.service} {site.cityIn}: металлоконструкции, ворота, ограждения, детали. Любой цвет RAL.</p>
+        </div>
+        <div>
+          <h3 class="ftr__h">Разделы</h3>
+          <a href={to('#what')}>Что красим</a>
+          <a href={to('#steps')}>Как красим</a>
+          <a href={to('#palette')}>Цвета RAL</a>
+          <a href={to('#faq')}>Вопросы</a>
+        </div>
+        <div>
+          <h3 class="ftr__h">Связаться</h3>
+          <a href={phoneHref}>{c.phone}</a>
+          <span>{c.hours}</span>
+          {c.whatsapp && <a href={c.whatsapp} target="_blank" rel="noopener">WhatsApp</a>}
+          {c.telegram && <a href={c.telegram} target="_blank" rel="noopener">Telegram</a>}
+        </div>
+        <div>
+          <h3 class="ftr__h">Цех</h3>
+          <span>{c.address}</span>
+          {c.email && <a href={`mailto:${c.email}`}>{c.email}</a>}
+        </div>
+      </div>
+      <div class="wrap ftr__bottom">
+        <span>© {year} {site.brand.name}</span>
+        <a href="/politika/">Политика обработки персональных данных</a>
+        <span>Не является публичной офертой</span>
+      </div>
+    </footer>
+  </body>
+</html>
+
+<style>
+  .nav { position: fixed; top: 12px; left: 0; right: 0; z-index: 50; padding: 0 var(--pad); pointer-events: none; }
+  .nav__in {
+    pointer-events: auto; max-width: var(--maxw); margin: 0 auto; display: flex; align-items: center; gap: 24px;
+    height: 60px; padding: 0 10px 0 18px; border-radius: 16px;
+    background: rgba(16, 17, 20, 0.72); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1), 0 10px 30px rgba(0, 0, 0, 0.18);
+  }
+  .nav__logo { margin-right: auto; text-decoration: none; }
+  .nav__links { display: flex; gap: 4px; }
+  .nav__links a { color: rgba(255, 255, 255, 0.78); text-decoration: none; font-size: 15px; font-weight: 500; padding: 8px 12px; border-radius: 10px; }
+  .nav__links a:hover { background: rgba(255, 255, 255, 0.1); color: #fff; }
+  .nav__phone { display: flex; align-items: center; gap: 8px; color: #fff; font-weight: 600; text-decoration: none; white-space: nowrap; }
+  .nav__cta { background: var(--ral); color: var(--ral-ink); font-weight: 600; font-size: 15px; text-decoration: none; padding: 11px 16px; border-radius: 10px; white-space: nowrap; transition: background 0.3s, color 0.3s; }
+  @media (max-width: 1000px) { .nav__links { display: none; } }
+  @media (max-width: 600px) {
+    .nav { top: 8px; }
+    .nav__in { gap: 8px; height: 54px; padding: 0 8px 0 12px; }
+    .nav__phone span { display: none; }
+    .nav__phone { width: 40px; height: 40px; justify-content: center; border-radius: 10px; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.25); }
+    .nav__cta { padding: 10px 12px; }
+  }
+
+  .ftr { background: var(--card); border-top: 1px solid var(--line); padding: 56px 0 28px; font-size: 15px; }
+  .ftr__in { display: grid; grid-template-columns: minmax(0, 1.6fr) repeat(3, minmax(0, 1fr)); gap: 32px; padding-bottom: 40px; }
+  .ftr__in > div { display: grid; gap: 8px; align-content: start; }
+  .ftr__brand p { color: var(--muted); max-width: 320px; margin-top: 8px; }
+  .ftr__h { font: 600 15px/1.2 var(--f-head); margin-bottom: 4px; }
+  .ftr a { text-decoration: none; color: var(--muted); }
+  .ftr a:hover { color: var(--ral-accent); }
+  .ftr span { color: var(--muted); }
+  .ftr__bottom { position: relative; display: flex; flex-wrap: wrap; gap: 8px 28px; padding-top: 24px; font-size: 13px; }
+  .ftr__bottom::before { content: ''; position: absolute; top: 0; left: var(--pad); right: var(--pad); height: 1px; background: var(--line); }
+  @media (max-width: 860px) { .ftr__in { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } .ftr__brand { grid-column: 1 / -1; } }
+</style>

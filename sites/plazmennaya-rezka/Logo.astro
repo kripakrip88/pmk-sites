@@ -1,6 +1,7 @@
 ---
 // Знак «Плазмореза»: дуга плазмы из сопла + искра.
 interface Props { light?: boolean }
+import site from '../../src/lib/site.js';
 const { light = false } = Astro.props;
 ---
 <span class:list={['logo', { 'logo--light': light }]}>
@@ -12,7 +13,7 @@ const { light = false } = Astro.props;
       <circle cx="22.5" cy="23.5" r="1.8" fill="var(--spark)" />
     </svg>
   </span>
-  <span class="logo__word">Плазморез</span>
+  <span class="logo__word">{site.brand.name}</span>
 </span>
 
 <style>
