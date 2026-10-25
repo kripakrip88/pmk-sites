@@ -1,4 +1,4 @@
-/* Шов — работа-сварщиком-хабаровск.рф. Оформление сайта вакансий: шрифты и цвета поверх общего шаблона sites/_rabota. */
+/* Шов — работа-сварщиком-хабаровск.рф. «Дуга в темноте»: почти чёрный фон, расплавленный оранжевый, свой первый экран (Hero.astro). */
 @import '@fontsource/oswald/cyrillic-500.css';
 @import '@fontsource/oswald/latin-500.css';
 @import '@fontsource/oswald/cyrillic-600.css';
@@ -9,18 +9,20 @@
 @import '@fontsource/pt-sans/latin-700.css';
 
 :root {
-  --bg: #111418;
-  --fg: #eef1f4;
-  --muted: #9aa4ae;
-  --line: #262c33;
-  --card: #171b21;
-  --soft: #1c2128;
-  --primary: #38bdf8;
-  --primary-ink: #04121c;
-  --accent: #f59e0b;
-  --band: #0e3a52;
+  --bg: #0e1012;
+  --fg: #f2efe9;
+  --muted: #a29d95;
+  --line: #2a2724;
+  --card: #15171a;
+  --soft: #171a1e;
+  --primary: #ff7a1a;
+  --primary-ink: #1a0d03;
+  --accent: #ffd27a;
+  --band: #1c140e;
   --band-ink: #ffffff;
-  --illo-ink: #d7dde3;
+  --illo-ink: #f2efe9;
+  --step-bg: transparent;
+  --step-fg: #ff7a1a;
 
   --f-head: 'Oswald', Arial, sans-serif;
   --f-text: 'PT Sans', -apple-system, 'Segoe UI', Arial, sans-serif;
@@ -30,3 +32,9 @@
   --r: 4px;
   --r-btn: 4px;
 }
+
+/* тёплый отсвет вместо серых плашек */
+.of__ico { box-shadow: 0 0 18px rgba(255, 122, 26, 0.35); }
+.st__n { box-shadow: inset 0 0 0 2px var(--primary); }
+.band { background: radial-gradient(600px 300px at 0% 100%, rgba(255, 122, 26, 0.22), transparent 70%), var(--band) !important; box-shadow: inset 0 0 0 1px rgba(255, 122, 26, 0.18); }
+.sec--alt { background: #121417 !important; }
