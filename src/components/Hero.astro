@@ -1,0 +1,51 @@
+---
+import LeadForm from './LeadForm.astro';
+import site, { phoneHref } from '../lib/site.js';
+const h = site.hero;
+---
+<section class="hero">
+  <div class="container hero__in">
+    <div class="hero__text">
+      <div class="eyebrow">{h.eyebrow}</div>
+      <h1>{h.title} {h.accent && <span class="hero__accent">{h.accent}</span>}</h1>
+      <p class="hero__lead">{h.lead}</p>
+      <div class="hero__btns">
+        <a class="btn btn--accent" href="#lead">Отправить чертёж</a>
+        <a class="btn btn--ghost" href={phoneHref}>{site.contacts.phone}</a>
+      </div>
+      <ul class="hero__trust">
+        {h.trust.map(([t, s]) => <li><b>{t}</b><span>{s}</span></li>)}
+      </ul>
+    </div>
+    <div class="hero__form"><LeadForm /></div>
+  </div>
+</section>
+
+<style>
+  .hero { background: var(--ink); color: #fff; padding: 64px 0 72px; position: relative; overflow: hidden; }
+  /* сетка «раскроя» на фоне — намёк на лист металла */
+  .hero::before {
+    content: ''; position: absolute; inset: 0; pointer-events: none;
+    background-image: linear-gradient(var(--line-dark) 1px, transparent 1px), linear-gradient(90deg, var(--line-dark) 1px, transparent 1px);
+    background-size: 48px 48px; opacity: 0.35;
+    mask-image: radial-gradient(ellipse at 20% 30%, #000 0%, transparent 70%);
+  }
+  .hero__in { position: relative; display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 56px; align-items: center; }
+  .hero h1 { font-size: clamp(34px, 5vw, 58px); font-weight: 800; }
+  .hero__accent { display: inline-block; background: var(--accent); color: var(--ink); padding: 0 12px; border-radius: 10px; }
+  .hero__lead { font-size: 19px; color: #d5dade; margin-top: 20px; max-width: 560px; }
+  .hero__btns { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+  .hero__trust { list-style: none; padding: 0; margin: 40px 0 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+  .hero__trust li { border-top: 2px solid var(--accent); padding-top: 12px; display: grid; gap: 2px; }
+  .hero__trust b { font-size: 18px; }
+  .hero__trust span { font-size: 14px; color: var(--muted-on-dark); }
+  @media (max-width: 960px) {
+    .hero__in { grid-template-columns: minmax(0, 1fr); gap: 40px; }
+  }
+  @media (max-width: 600px) {
+    .hero { padding: 40px 0 48px; }
+    .hero__lead { font-size: 17px; }
+    .hero__btns .btn { flex: 1 1 100%; }
+    .hero__trust { grid-template-columns: minmax(0, 1fr); gap: 12px; margin-top: 32px; }
+  }
+</style>

@@ -1,0 +1,51 @@
+---
+import site, { phoneHref } from '../lib/site.js';
+const home = Astro.url.pathname === '/';
+const link = (hash) => (home ? hash : '/' + hash);
+---
+<header class="hdr">
+  <div class="container hdr__in">
+    <a class="logo" href="/" aria-label={`${site.service} — на главную`}>
+      <span class="logo__mark" aria-hidden="true"></span>
+      <span class="logo__txt">
+        <b>{site.brand.name}</b>
+        <small>{site.brand.tagline}</small>
+      </span>
+    </a>
+    <nav class="hdr__nav" aria-label="Разделы">
+      <a href={link('#materials')}>Материалы</a>
+      <a href={link('#steps')}>Как заказать</a>
+      <a href={link('#faq')}>Вопросы</a>
+      <a href={link('#contacts')}>Контакты</a>
+    </nav>
+    <a class="hdr__phone" href={phoneHref}>
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/></svg>
+      <span>{site.contacts.phone}</span>
+    </a>
+    <a class="btn btn--accent hdr__cta" href={link('#lead')}>Рассчитать</a>
+  </div>
+</header>
+
+<style>
+  .hdr { position: sticky; top: 0; z-index: 50; background: rgba(244, 245, 247, 0.92); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+  .hdr__in { display: flex; align-items: center; gap: 28px; height: 68px; }
+  .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; margin-right: auto; }
+  .logo__mark { width: 30px; height: 30px; border-radius: 8px; background: var(--ink); position: relative; flex: none; }
+  .logo__mark::after { content: ''; position: absolute; inset: 9px; background: var(--accent); border-radius: 3px; }
+  .logo__txt { display: flex; flex-direction: column; line-height: 1.1; }
+  .logo__txt b { font-size: 17px; font-weight: 800; }
+  .logo__txt small { font-size: 12px; color: var(--muted); }
+  .hdr__nav { display: flex; gap: 24px; font-weight: 600; font-size: 15px; }
+  .hdr__nav a { text-decoration: none; color: var(--muted); }
+  .hdr__nav a:hover { color: var(--ink); }
+  .hdr__phone { display: flex; align-items: center; gap: 8px; font-weight: 800; text-decoration: none; white-space: nowrap; }
+  .hdr__cta { padding: 12px 20px; }
+  @media (max-width: 960px) { .hdr__nav { display: none; } }
+  @media (max-width: 600px) {
+    .hdr__in { gap: 12px; height: 60px; }
+    .logo__txt small { display: none; }
+    .hdr__phone span { display: none; }
+    .hdr__phone { width: 44px; height: 44px; justify-content: center; border-radius: var(--r-btn); box-shadow: inset 0 0 0 1.5px var(--line); }
+    .hdr__cta { padding: 12px 16px; }
+  }
+</style>

@@ -1,0 +1,30 @@
+---
+import site, { phoneHref } from '../lib/site.js';
+const c = site.contacts;
+---
+<section class="cta">
+  <div class="container cta__in">
+    <div>
+      <h2>Пришлите чертёж — посчитаем за 24 часа</h2>
+      <p>Удобнее в мессенджере? Отправьте файл туда — ответит инженер.</p>
+    </div>
+    <div class="cta__btns">
+      <a class="btn btn--dark" href="#lead">Оставить заявку</a>
+      {c.whatsapp && <a class="btn btn--ghost" href={c.whatsapp} target="_blank" rel="noopener">WhatsApp</a>}
+      {c.telegram && <a class="btn btn--ghost" href={c.telegram} target="_blank" rel="noopener">Telegram</a>}
+      <a class="btn btn--ghost" href={phoneHref}>{c.phone}</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .cta { background: var(--accent); padding: 56px 0; }
+  .cta__in { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 32px; align-items: center; }
+  .cta p { margin-top: 10px; font-weight: 500; }
+  .cta__btns { display: flex; flex-wrap: wrap; gap: 10px; justify-content: flex-end; max-width: 640px; }
+  @media (max-width: 860px) {
+    .cta__in { grid-template-columns: minmax(0, 1fr); }
+    .cta__btns { justify-content: flex-start; max-width: none; }
+  }
+  @media (max-width: 560px) { .cta__btns .btn { flex: 1 1 calc(50% - 5px); } .cta__btns .btn--dark { flex-basis: 100%; } }
+</style>

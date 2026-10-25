@@ -1,0 +1,84 @@
+/* Дизайн-система ПМК (токены — из pmkpark-redesign/local/assets/pmk/design-system.css) */
+@import '@fontsource/manrope/cyrillic-400.css';
+@import '@fontsource/manrope/latin-400.css';
+@import '@fontsource/manrope/cyrillic-600.css';
+@import '@fontsource/manrope/latin-600.css';
+@import '@fontsource/manrope/cyrillic-700.css';
+@import '@fontsource/manrope/latin-700.css';
+@import '@fontsource/manrope/cyrillic-800.css';
+@import '@fontsource/manrope/latin-800.css';
+
+:root {
+  --bg: #f4f5f7;
+  --surface: #ffffff;
+  --ink: #16191c;
+  --ink-2: #22272c;
+  --accent: #c8f000;
+  --muted: #5a6470;
+  --muted-on-dark: #a3abb4;
+  --line: #e3e6ea;
+  --line-dark: #30363c;
+  --danger: #e5564a;
+
+  --r-card: 16px;
+  --r-btn: 11px;
+  --maxw: 1180px;
+  --pad: 24px;
+  --font: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+  --shadow: 0 10px 30px rgba(22, 25, 28, 0.08);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font: 400 16px/1.6 var(--font);
+  -webkit-font-smoothing: antialiased;
+}
+img { max-width: 100%; display: block; }
+a { color: inherit; }
+h1, h2, h3 { margin: 0; line-height: 1.15; letter-spacing: -0.02em; }
+h2 { font-size: clamp(26px, 3.4vw, 38px); font-weight: 800; }
+h3 { font-size: 18px; font-weight: 700; }
+p { margin: 0; }
+
+.container { max-width: var(--maxw); margin: 0 auto; padding: 0 var(--pad); }
+@media (max-width: 600px) { :root { --pad: 16px; } }
+
+.section { padding: 72px 0; }
+.section--dark { background: var(--ink); color: #fff; }
+.section__head { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 12px 32px; margin-bottom: 32px; }
+.section__head p { color: var(--muted); max-width: 460px; }
+.section--dark .section__head p { color: var(--muted-on-dark); }
+@media (max-width: 600px) { .section { padding: 48px 0; } }
+
+/* фирменный мотив: лаймовый квадрат + капс */
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 10px;
+  font: 700 13px/1 var(--font); letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 18px;
+}
+.eyebrow::before { content: ''; width: 12px; height: 12px; background: var(--accent); border-radius: 3px; }
+.section--dark .eyebrow, .hero .eyebrow { color: var(--muted-on-dark); }
+
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  font: 700 15px/1 var(--font); padding: 16px 26px; border-radius: var(--r-btn);
+  border: 0; cursor: pointer; text-decoration: none; white-space: nowrap;
+  transition: transform 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+}
+.btn:hover { transform: translateY(-1px); }
+.btn--accent { background: var(--accent); color: var(--ink); }
+.btn--accent:hover { box-shadow: 0 8px 24px rgba(200, 240, 0, 0.35); }
+.btn--ghost { background: transparent; color: inherit; box-shadow: inset 0 0 0 1.5px currentColor; }
+.btn--dark { background: var(--ink); color: #fff; }
+
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-card); padding: 28px; }
+
+.chips { display: flex; flex-wrap: wrap; gap: 8px; list-style: none; margin: 0; padding: 0; }
+.chips li { background: var(--surface); border: 1px solid var(--line); border-radius: 999px; padding: 8px 16px; font-weight: 600; font-size: 14px; }
+
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }

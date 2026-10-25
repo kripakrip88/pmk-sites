@@ -1,0 +1,22 @@
+---
+import site from '../lib/site.js';
+---
+<section class="section">
+  <div class="container">
+    <div class="section__head">
+      <div><div class="eyebrow">Почему мы</div><h2>Режет завод, а не посредник</h2></div>
+    </div>
+    <div class="adv">
+      {site.advantages.map(([t, s]) => <div class="card adv__item"><h3>{t}</h3><p>{s}</p></div>)}
+    </div>
+  </div>
+</section>
+
+<style>
+  .adv { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+  .adv__item { display: grid; gap: 10px; }
+  .adv__item h3 { display: flex; align-items: center; gap: 10px; }
+  .adv__item h3::before { content: ''; width: 10px; height: 10px; border-radius: 3px; background: var(--accent); flex: none; }
+  .adv__item p { color: var(--muted); }
+  @media (max-width: 760px) { .adv { grid-template-columns: minmax(0, 1fr); gap: 12px; } }
+</style>

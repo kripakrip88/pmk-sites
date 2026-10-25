@@ -1,0 +1,16 @@
+{
+  "name": "pmk-sites",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "build:all": "node scripts/build-all.mjs",
+    "preview": "astro preview",
+    "nginx": "node scripts/gen-nginx.mjs"
+  },
+  "dependencies": {
+    "@fontsource/manrope": "5.2.8",
+    "astro": "7.3.8"
+  }
+}

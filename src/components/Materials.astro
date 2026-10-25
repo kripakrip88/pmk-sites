@@ -1,0 +1,35 @@
+---
+import site from '../lib/site.js';
+const m = site.materials;
+---
+<section class="section" id="materials">
+  <div class="container">
+    <div class="section__head">
+      <div><div class="eyebrow">Возможности</div><h2>{m.title}</h2></div>
+      <p>{m.note}</p>
+    </div>
+    <div class="mat">
+      <table class="card mat__table">
+        <thead><tr><th>Материал</th><th>Толщина</th></tr></thead>
+        <tbody>{m.rows.map(([name, t]) => <tr><td>{name}</td><td>{t}</td></tr>)}</tbody>
+      </table>
+      <div class="card">
+        <h3>Что изготовим</h3>
+        <ul class="chips mat__chips">{m.products.map((p) => <li>{p}</li>)}</ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .mat { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 20px; align-items: start; }
+  .mat__table { width: 100%; border-collapse: separate; border-spacing: 0; padding: 8px 28px; }
+  .mat__table th { text-align: left; font-size: 13px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); padding: 16px 0 12px; }
+  .mat__table td { padding: 16px 0; border-top: 1px solid var(--line); font-weight: 600; }
+  .mat__table td:last-child, .mat__table th:last-child { text-align: right; white-space: nowrap; padding-left: 16px; }
+  .mat__table td:last-child { font-weight: 800; }
+  .mat__chips { margin-top: 18px; }
+  .mat__chips li { background: var(--bg); }
+  @media (max-width: 860px) { .mat { grid-template-columns: minmax(0, 1fr); } }
+  @media (max-width: 600px) { .mat__table { padding: 4px 18px; } .card { padding: 20px; } }
+</style>
