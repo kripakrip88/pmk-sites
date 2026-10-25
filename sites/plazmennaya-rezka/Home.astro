@@ -39,8 +39,9 @@ const icons: Record<string, string> = {
         <div class="bc__top">
           <h3>{b.ruler.head} до {site.maxThickness} мм</h3>
           <p>{b.ruler.text}</p>
+          <ul class="bc__mat">{b.ruler.materials.map(([m, t]) => <li>{m} <b>до {t} мм</b></li>)}</ul>
         </div>
-        <div class="rl" aria-hidden="true">
+        <div class="rl" aria-hidden="true" style={`grid-template-columns:repeat(${b.ruler.marks.length},minmax(0,1fr))`}>
           {b.ruler.marks.map((m) => (
             <div class:list={['rl__col', { 'rl__col--on': m >= b.ruler.from }]}>
               <div class="rl__bar" style={`height:${Math.max(6, (m / maxMark) * 100)}%`}></div>
@@ -151,8 +152,11 @@ const icons: Record<string, string> = {
   .bc__ico { width: 44px; height: 44px; border-radius: 12px; background: var(--plasma-tint); color: var(--plasma); display: grid; place-items: center; margin-bottom: 2px; }
   .bc--big { grid-row: span 3; background: linear-gradient(160deg, #ffffff 0%, var(--plasma-tint) 100%); gap: 24px; grid-template-rows: auto minmax(200px, 1fr) auto; align-content: stretch; }
   .bc--big h3 { font-size: clamp(24px, 2.6vw, 32px); }
-  .bc__top { display: grid; gap: 10px; max-width: 480px; }
-  .rl { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 10px; align-items: end; height: 100%; min-height: 200px; }
+  .bc__top { display: grid; gap: 10px; max-width: 520px; }
+  .bc__mat { list-style: none; margin: 4px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+  .bc__mat li { font-size: 14px; color: var(--muted); background: #fff; border: 1px solid var(--line); border-radius: 999px; padding: 6px 12px; }
+  .bc__mat b { color: var(--plasma); font-weight: 600; }
+  .rl { display: grid; gap: 10px; align-items: end; height: 100%; min-height: 200px; }
   .rl__col { display: grid; grid-template-rows: 1fr auto; gap: 8px; height: 100%; text-align: center; font: 600 14px/1 var(--f-head); color: var(--muted); }
   .rl__bar { align-self: end; border-radius: 8px 8px 4px 4px; background: #d9dbea; }
   .rl__col--on { color: var(--plasma); }
@@ -162,7 +166,7 @@ const icons: Record<string, string> = {
   .rl__dot--on { background: var(--plasma); margin-left: 0; }
   @media (max-width: 900px) {
     .bento { grid-template-columns: minmax(0, 1fr); }
-    .bc--big { grid-row: auto; }
+    .bc--big { grid-row: auto; grid-template-rows: auto auto auto; }
     .rl { min-height: 160px; height: 160px; gap: 6px; }
   }
 
