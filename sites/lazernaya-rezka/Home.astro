@@ -1,7 +1,9 @@
 ---
-// Посадочная «Кромки». Порядок: чертёж → материалы → заявка → порядок работы → преимущества → справка → вопросы.
+// Посадочная «Кромки». Порядок: чертёж → материалы → производство (фото) → заявка → порядок работы →
+// преимущества → справка → вопросы.
 import Drawing from './Drawing.astro';
 import LeadForm from './LeadForm.astro';
+import Gallery from './Gallery.astro';
 import { Content as Text } from './text.md';
 import site, { phoneHref } from '../../src/lib/site.js';
 
@@ -71,11 +73,22 @@ const ticks = Array.from({ length: m.max / 10 + 1 }, (_, i) => i * 10);
   </div>
 </section>
 
-<!-- 3. Заявка: «синька» -->
+<!-- 3. Производство: фото -->
+<section class="sec sec--tight" id="photos">
+  <div class="wrap">
+    <div class="sec__head">
+      <div><div class="label"><b>02</b> Производство</div><h2>Так выглядит работа</h2></div>
+      <p>Снимаем у себя в цеху — без стоковых картинок.</p>
+    </div>
+    <Gallery />
+  </div>
+</section>
+
+<!-- 4. Заявка: «синька» -->
 <section class="sec order" id="lead">
   <div class="wrap order__grid">
     <div class="order__text">
-      <div class="label"><b>02</b> Расчёт</div>
+      <div class="label"><b>03</b> Расчёт</div>
       <h2>Пришлите чертёж — посчитаем за 24 часа</h2>
       <p>Ответим ценой, сроком и советом по материалу. Без чертежа тоже можно: сфотографируйте эскиз с размерами.</p>
       <ul class="order__list mono">
@@ -89,11 +102,11 @@ const ticks = Array.from({ length: m.max / 10 + 1 }, (_, i) => i * 10);
   </div>
 </section>
 
-<!-- 4. Порядок работы: линия реза -->
+<!-- 5. Порядок работы: линия реза -->
 <section class="sec" id="steps">
   <div class="wrap">
     <div class="sec__head">
-      <div><div class="label"><b>03</b> Порядок работы</div><h2>От файла до готовых деталей</h2></div>
+      <div><div class="label"><b>04</b> Порядок работы</div><h2>От файла до готовых деталей</h2></div>
     </div>
     <ol class="steps">
       {site.steps.map(([t, s], i) => (
@@ -103,11 +116,11 @@ const ticks = Array.from({ length: m.max / 10 + 1 }, (_, i) => i * 10);
   </div>
 </section>
 
-<!-- 5. Преимущества: таблица-спецификация -->
+<!-- 6. Преимущества: таблица-спецификация -->
 <section class="sec sec--tight">
   <div class="wrap">
     <div class="sec__head">
-      <div><div class="label"><b>04</b> Почему мы</div><h2>Режем сами — без посредников</h2></div>
+      <div><div class="label"><b>05</b> Почему мы</div><h2>Режем сами — без посредников</h2></div>
     </div>
     <div class="spec">
       {site.advantages.map(([t, s], i) => (
@@ -117,19 +130,19 @@ const ticks = Array.from({ length: m.max / 10 + 1 }, (_, i) => i * 10);
   </div>
 </section>
 
-<!-- 6. Справка (SEO-текст) -->
+<!-- 7. Справка (SEO-текст) -->
 <section class="sec sec--tight">
   <div class="wrap note">
-    <div class="note__side"><div class="label"><b>05</b> Справка</div></div>
+    <div class="note__side"><div class="label"><b>06</b> Справка</div></div>
     <div class="note__body"><Text /></div>
   </div>
 </section>
 
-<!-- 7. Вопросы -->
+<!-- 8. Вопросы -->
 <section class="sec faq" id="faq">
   <div class="wrap">
     <div class="sec__head">
-      <div><div class="label"><b>06</b> Вопросы</div><h2>Частые вопросы</h2></div>
+      <div><div class="label"><b>07</b> Вопросы</div><h2>Частые вопросы</h2></div>
     </div>
     <div class="faq__list">
       {site.faq.map(([q, a], i) => (

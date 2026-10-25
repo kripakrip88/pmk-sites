@@ -1,0 +1,43 @@
+---
+// Фото производства. Файлы кладутся в ./photos/ с номером слота в начале имени: 01-rez.jpg, 02-….
+// При сборке Astro пережимает их в WebP и выкидывает метаданные (EXIF, GPS).
+// Нет файла для слота — рисуется штрихованная заглушка с подписью (видно, какого кадра не хватает).
+import { Image } from 'astro:assets';
+import site from '../../src/lib/site.js';
+
+const files = import.meta.glob<{ default: ImageMetadata }>('./photos/*.{jpg,jpeg,png,webp}', { eager: true });
+const byNum = (num: string) => Object.entries(files).find(([path]) => path.split('/').pop()!.startsWith(num))?.[1].default;
+const slots = site.gallery.map(([num, caption]) => ({ num, caption, img: byNum(num) }));
+---
+<div class="gal">
+  {slots.map((s, i) => (
+    <figure class:list={['gal__item', { 'gal__item--main': i === 0 }]}>
+      <div class="gal__ph">{s.img ? (
+        <Image src={s.img} alt={s.caption} widths={i === 0 ? [640, 960, 1400] : [480, 720]} sizes={i === 0 ? '(max-width: 760px) 100vw, 60vw' : '(max-width: 760px) 100vw, 30vw'} format="webp" quality={78} loading="lazy" />
+      ) : (
+        <div class="gal__stub" role="img" aria-label={`Нет фото: ${s.caption}`}><span class="mono">Фото {s.num}<br />нет файла</span></div>
+      )}</div>
+      <figcaption class="mono"><b>{s.num}</b> {s.caption}</figcaption>
+    </figure>
+  ))}
+</div>
+
+<style>
+  .gal { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; align-items: stretch; }
+  .gal__item { margin: 0; background: var(--sheet); border: 1px solid var(--ink); padding: 8px 8px 0; display: grid; grid-template-rows: minmax(0, 1fr) auto; }
+  .gal__item--main { grid-column: span 2; grid-row: span 2; }
+  /* размер рамки задаёт .gal__ph, картинка просто заполняет её — от пропорций снимка вёрстка не зависит */
+  .gal__ph { position: relative; aspect-ratio: 3 / 2; overflow: hidden; }
+  .gal__item--main .gal__ph { aspect-ratio: auto; min-height: 280px; }
+  .gal__ph > :global(img), .gal__stub { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .gal__stub { display: flex; align-items: center; justify-content: center; text-align: center; color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em;
+    background: repeating-linear-gradient(45deg, var(--rule) 0 1px, transparent 1px 10px), var(--paper); }
+  .gal__stub span { background: var(--sheet); padding: 6px 10px; border: 1px solid var(--rule-strong); }
+  figcaption { padding: 10px 2px; font-size: 12px; color: var(--muted); }
+  figcaption b { color: var(--laser); font-weight: 500; margin-right: 6px; }
+  @media (max-width: 760px) {
+    .gal { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+    .gal__item--main { grid-column: 1 / -1; grid-row: auto; }
+    .gal__item--main .gal__ph { aspect-ratio: 3 / 2; min-height: 0; }
+  }
+</style>
