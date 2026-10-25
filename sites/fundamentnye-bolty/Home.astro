@@ -111,7 +111,25 @@ const kg = (v: number | null) => (v == null ? '—' : v.toFixed(2).replace('.', 
   <div class="text"><Text /></div>
 </section>
 
+<script>
+  // «Чертёж»: силуэт типа прорисовывается, когда запись появляется на экране; потом гайка, шайба, плита.
+  // Без JS и при «уменьшить движение» силуэты просто нарисованы.
+  const types = document.querySelector('.types');
+  if (types && 'IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    types.classList.add('is-armed');
+    const io = new IntersectionObserver((entries) => {
+      for (const e of entries) if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); }
+    }, { threshold: 0.4 });
+    types.querySelectorAll('.ty').forEach((t) => io.observe(t));
+  }
+</script>
+
 <style>
+  .types.is-armed :global(.bt__rod) { stroke-dasharray: 1 2; stroke-dashoffset: 1; transition: stroke-dashoffset 0.9s cubic-bezier(0.4, 0, 0.2, 1); }
+  .types.is-armed :global(.bt__part) { opacity: 0; transform: translateY(-6px); transition: opacity 0.35s ease-out 0.75s, transform 0.35s ease-out 0.75s; }
+  .types.is-armed .ty.is-in :global(.bt__rod) { stroke-dashoffset: 0; }
+  .types.is-armed .ty.is-in :global(.bt__part) { opacity: 1; transform: none; }
+
   .hero { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 24px 32px; align-items: center; padding: 16px 0 40px; }
   .hero h1 { font-size: clamp(26px, 4vw, 34px); font-weight: 700; letter-spacing: -0.02em; }
   .hero__sub { color: var(--zinc); font-size: 18px; font-weight: 500; margin-top: 6px; }

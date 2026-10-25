@@ -1,17 +1,77 @@
 ---
-// «Аватар» паспорта: торец болта — шпилька в гайке на шайбе, вид сверху.
+// «Аватар» паспорта: болт в фундаменте сбоку — бетон, опорная плита, шайба, гайка.
+// При загрузке гайка один раз накручивается по резьбе (шаг за оборот) и встаёт на шайбу.
+// Без JS и при «уменьшить движение» — сразу последний кадр.
+import { NUT, nutFaces } from './nut.js';
+
+const specks = Array.from({ length: 26 }, (_, i) => ({ cx: (i * 37) % 160, cy: 128 + ((i * 13) % 30), r: 0.6 + (i % 3) * 0.35 }));
+const threads = Array.from({ length: 31 }, (_, i) => 8 + i * 3.2);
 ---
 <div class="be" aria-hidden="true">
-  <svg viewBox="0 0 120 120" width="120" height="120">
-    <circle cx="60" cy="60" r="44" fill="none" stroke="var(--rule-strong)" stroke-width="2" />
-    <path d="M60 26 89.4 43v34L60 94 30.6 77V43z" fill="var(--sheet)" stroke="var(--text)" stroke-width="2.5" stroke-linejoin="round" />
-    <circle cx="60" cy="60" r="20" fill="var(--zinc)" />
-    <circle cx="60" cy="60" r="20" fill="none" stroke="var(--zinc-dark)" stroke-width="1.5" stroke-dasharray="2.2 2.2" />
-    <circle cx="60" cy="60" r="13" fill="none" stroke="rgba(255,255,255,0.45)" stroke-width="1.2" />
+  <svg viewBox="0 0 160 160" width="160" height="160">
+    <defs>
+      <linearGradient id="be-stud" x1="0" x2="1" y1="0" y2="0">
+        <stop offset="0" stop-color="#4a5158" /><stop offset=".35" stop-color="#9aa3ab" /><stop offset=".55" stop-color="#c9d0d6" /><stop offset="1" stop-color="#3b4249" />
+      </linearGradient>
+      <linearGradient id="be-wash" x1="0" x2="1" y1="0" y2="0">
+        <stop offset="0" stop-color="#7d868e" /><stop offset=".4" stop-color="#d9dee2" /><stop offset="1" stop-color="#6b737b" />
+      </linearGradient>
+      <linearGradient id="be-plate" x1="0" x2="0" y1="0" y2="1">
+        <stop offset="0" stop-color="#8a939b" /><stop offset=".5" stop-color="#b9c0c6" /><stop offset="1" stop-color="#7a838b" />
+      </linearGradient>
+      <linearGradient id="be-conc" x1="0" x2="0" y1="0" y2="1">
+        <stop offset="0" stop-color="#cfccc4" /><stop offset="1" stop-color="#b9b5ab" />
+      </linearGradient>
+    </defs>
+    <rect x="0" y="122" width="160" height="38" fill="url(#be-conc)" />
+    {specks.map((s) => <circle cx={s.cx} cy={s.cy} r={s.r} fill="#a29d92" opacity=".7" />)}
+    <rect x="69" y="6" width="22" height="104" fill="url(#be-stud)" />
+    <path d="M69 6h22l-2-3h-18z" fill="#5d656c" />
+    {threads.map((y) => <path d={`M69 ${y}L91 ${y + 1.6}`} stroke="#2f353b" stroke-width=".9" opacity=".55" />)}
+    <rect x="10" y="106" width="140" height="16" rx="1" fill="url(#be-plate)" />
+    <path d="M10 106h140" stroke="#dfe4e8" />
+    <rect x="53" y="100" width="54" height="6" rx="1.2" fill="url(#be-wash)" />
+    <g class="be__nut">
+      {nutFaces(NUT.THETA, NUT.Y).map((f) => <path d={f.d} fill={f.fill} stroke="#3d444a" stroke-width=".8" stroke-linejoin="round" />)}
+    </g>
   </svg>
 </div>
 
+<script>
+  import { NUT, nutFaces } from './nut.js';
+
+  const nut = document.querySelector<SVGGElement>('.be__nut');
+  if (nut && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const NS = 'http://www.w3.org/2000/svg';
+    const paths = [0, 1, 2].map(() => {
+      const p = document.createElementNS(NS, 'path');
+      p.setAttribute('stroke', '#3d444a');
+      p.setAttribute('stroke-width', '.8');
+      p.setAttribute('stroke-linejoin', 'round');
+      return p;
+    });
+    nut.replaceChildren(...paths);
+    const lift = NUT.PITCH * NUT.TURNS;
+    const T = 2600;
+    let start = 0;
+    const frame = (now: number) => {
+      start ||= now + 250;
+      const t = Math.min(1, Math.max(0, (now - start) / T));
+      const s = 1 - (1 - t) ** 3; // быстро накрутили, к концу дожимаем медленно
+      const faces = nutFaces(s * NUT.TURNS * 2 * Math.PI + NUT.THETA, NUT.Y - lift * (1 - s));
+      paths.forEach((p, i) => {
+        const f = faces[i];
+        p.style.display = f ? '' : 'none';
+        if (f) { p.setAttribute('d', f.d); p.setAttribute('fill', f.fill); }
+      });
+      if (t < 1) requestAnimationFrame(frame);
+    };
+    requestAnimationFrame(frame);
+  }
+</script>
+
 <style>
-  .be { width: 132px; height: 132px; border-radius: 50%; background: linear-gradient(145deg, #f4f5f6, #dfe2e5); display: grid; place-items: center; flex: none; box-shadow: inset 0 0 0 1px var(--rule); }
-  @media (max-width: 720px) { .be { width: 104px; height: 104px; } .be svg { width: 94px; height: 94px; } }
+  .be { width: 148px; height: 148px; border-radius: 50%; overflow: hidden; background: linear-gradient(145deg, #f4f5f6, #dfe2e5); flex: none; box-shadow: inset 0 0 0 1px var(--rule); }
+  .be svg { width: 100%; height: 100%; }
+  @media (max-width: 720px) { .be { width: 112px; height: 112px; } }
 </style>
