@@ -59,8 +59,9 @@ npm run nginx && docker compose exec nginx nginx -t && docker compose exec nginx
 `gen-nginx` сам включает https у сайта, когда в томе `pmk-sites_certs` появился его сертификат
 (`TLS=0` — всем только http, `TLS=1` — всем https). Запрос по IP сбрасывается (444).
 
-Продление — cron раз в сутки:
-`docker compose run --rm certbot renew -q && docker compose exec nginx nginx -s reload`.
+Продление — `/etc/cron.d/pmk-sites-certbot`, каждый день в 04:17, лог `/var/log/pmk-certbot.log`:
+`docker compose run --rm certbot renew -q && docker compose exec -T nginx nginx -s reload`.
+Проверка без выпуска: `docker compose run --rm certbot renew --dry-run`.
 
 ## 5. PocketBase
 
