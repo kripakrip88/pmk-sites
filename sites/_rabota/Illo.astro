@@ -1,0 +1,158 @@
+---
+// Иллюстрация профессии для первого экрана: плоская графика с плотной обводкой, сталь + цвета сайта
+// (--primary, --accent, --soft). kind задаётся в site.json → theme.illo.
+interface Props { kind: string }
+const { kind } = Astro.props;
+const S = '#c9ced4', S2 = '#e3e6ea', S3 = '#9aa1a9'; // оттенки стали
+---
+<svg class="illo" viewBox="0 0 400 320" width="400" height="320" aria-hidden="true">
+  <g stroke="var(--illo-ink, #1b1f24)" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+    <ellipse cx="200" cy="168" rx="170" ry="140" fill="var(--soft)" stroke="none" />
+    <ellipse cx="200" cy="290" rx="150" ry="10" fill="#000" opacity=".08" stroke="none" />
+
+    {kind === 'weld' && (
+      <>
+        <rect x="56" y="232" width="288" height="30" rx="2" fill={S} />
+        <rect x="186" y="104" width="28" height="128" rx="2" fill={S2} />
+        <path d="M214 232c6-3 6-6 10-6s4 3 10 6" fill="var(--accent)" />
+        <path d="M186 232c-6-3-6-6-10-6s-4 3-10 6" fill={S3} />
+        <circle cx="232" cy="214" r="24" fill="var(--accent)" opacity=".35" stroke="none" />
+        <circle cx="232" cy="214" r="8" fill="#fff" stroke="none" />
+        <path d="M236 196l12-20 M250 214h22 M244 228l16 12 M222 196l-4-18" stroke="var(--accent)" stroke-width="3" />
+        <path d="M352 60L262 190" stroke-width="18" />
+        <path d="M352 60L262 190" stroke="var(--primary)" stroke-width="11" />
+        <path d="M252 186l18 12-10 14-14-10z" fill={S3} />
+        <path d="M70 104c0-30 22-48 50-48s46 18 46 48v54c0 12-10 22-22 22H92c-12 0-22-10-22-22z" fill="var(--primary)" />
+        <rect x="90" y="96" width="58" height="26" rx="4" fill="#1b1f24" />
+        <path d="M96 104h20" stroke="#fff" stroke-width="2" opacity=".6" />
+      </>
+    )}
+
+    {kind === 'fitter' && (
+      <>
+        <rect x="70" y="236" width="260" height="26" rx="3" fill={S3} />
+        <path d="M110 236v-58h70v58 M220 236v-58h70v58" fill={S} />
+        <rect x="104" y="156" width="82" height="24" rx="3" fill="var(--primary)" />
+        <rect x="214" y="156" width="82" height="24" rx="3" fill="var(--primary)" />
+        <rect x="186" y="132" width="28" height="70" rx="2" fill={S2} />
+        <path d="M296 168h58 M354 150v36" stroke-width="8" />
+        <path d="M296 168h58" stroke={S} stroke-width="4" />
+        <path d="M120 120l120-70" stroke-width="16" />
+        <path d="M120 120l120-70" stroke={S} stroke-width="9" />
+        <path d="M240 50a20 20 0 1 1 20 26l-6-12-14 2z" fill={S} />
+        <circle cx="114" cy="124" r="14" fill={S2} />
+        <path d="M150 210h40 M210 210h40" stroke={S3} />
+      </>
+    )}
+
+    {kind === 'paint' && (
+      <>
+        <path d="M60 150h220v44H60z" fill={S2} />
+        <path d="M60 150h120v44H60z" fill="var(--primary)" />
+        <path d="M60 160h220 M60 184h220" stroke-width="2" opacity=".35" />
+        <path d="M184 150c10 8 0 14 10 22s0 14 10 22" fill="none" stroke="var(--primary)" stroke-width="3" stroke-dasharray="2 6" />
+        <path d="M300 110h52l10 16h-62z" fill={S} />
+        <path d="M322 126v40 M314 166h18l-4 34h-10z" fill="var(--accent)" />
+        <path d="M352 110v-30h18v30" fill={S3} />
+        <path d="M296 118l-60 26 M296 118l-56 6 M296 118l-58 46" stroke="var(--primary)" stroke-width="2.4" stroke-dasharray="1 8" />
+        <rect x="70" y="214" width="34" height="34" rx="6" fill="var(--primary)" />
+        <rect x="112" y="214" width="34" height="34" rx="6" fill="var(--accent)" />
+        <rect x="154" y="214" width="34" height="34" rx="6" fill={S} />
+        <rect x="196" y="214" width="34" height="34" rx="6" fill="#1b1f24" />
+      </>
+    )}
+
+    {kind === 'student' && (
+      <>
+        <path d="M110 214c0-52 40-86 90-86s90 34 90 86z" fill="var(--accent)" />
+        <path d="M92 214h216v16H92z" fill="var(--accent)" />
+        <path d="M200 128v86 M160 136l10 78 M240 136l-10 78" stroke-width="2.4" opacity=".5" />
+        <path d="M200 52l120 40-120 40-120-40z" fill="var(--primary)" />
+        <path d="M140 112v36c20 14 100 14 120 0v-36" fill="var(--primary)" />
+        <path d="M320 92v58" stroke-width="3" /><circle cx="320" cy="156" r="7" fill="var(--accent)" />
+        <rect x="70" y="244" width="120" height="22" rx="4" fill={S} />
+        <rect x="200" y="244" width="130" height="22" rx="4" fill={S2} />
+        <path d="M84 255h60 M216 255h70" stroke-width="2" opacity=".5" />
+      </>
+    )}
+
+    {kind === 'loader' && (
+      <>
+        <rect x="70" y="252" width="120" height="12" fill={S3} />
+        <rect x="74" y="190" width="56" height="62" fill="#d6b98c" />
+        <rect x="134" y="190" width="52" height="62" fill="#c9a774" />
+        <rect x="96" y="132" width="70" height="58" fill="#d6b98c" />
+        <path d="M74 216h56 M134 222h52 M96 156h70" stroke-width="2" opacity=".5" />
+        <path d="M206 92v170" stroke-width="10" /><path d="M224 92v170" stroke-width="10" />
+        <path d="M190 252h60" stroke-width="8" />
+        <path d="M234 150h70l30 40v62h-100z" fill="var(--primary)" />
+        <path d="M254 150v-46h44l10 46" fill="none" stroke-width="5" />
+        <rect x="262" y="196" width="40" height="22" rx="3" fill="#fff" opacity=".85" />
+        <circle cx="258" cy="262" r="20" fill="#1b1f24" /><circle cx="258" cy="262" r="7" fill={S} />
+        <circle cx="318" cy="262" r="20" fill="#1b1f24" /><circle cx="318" cy="262" r="7" fill={S} />
+        <path d="M334 200h20v52h-20" fill="var(--accent)" />
+      </>
+    )}
+
+    {kind === 'factory' && (
+      <>
+        <path d="M60 262V146l50 30v-30l50 30v-30l50 30v-30l50 30V112h40v150z" fill={S2} />
+        <rect x="300" y="72" width="22" height="40" fill={S3} />
+        <path d="M60 262h280" stroke-width="4" />
+        <rect x="150" y="206" width="56" height="56" fill="var(--primary)" />
+        <path d="M150 220h56 M150 234h56 M150 248h56" stroke="#fff" stroke-width="2" opacity=".5" />
+        {[80, 230, 280].map((x) => <rect x={x} y="198" width="34" height="26" fill="#fff" />)}
+        <path d="M58 118h100" stroke="var(--accent)" stroke-width="8" />
+        <path d="M78 118v30 M138 118v20" stroke="var(--accent)" stroke-width="3" />
+        <path d="M86 280h228" stroke={S3} stroke-width="3" />
+      </>
+    )}
+
+    {kind === 'engineer' && (
+      <>
+        <rect x="70" y="70" width="240" height="180" rx="4" fill="#fff" />
+        <path d="M70 216h96v34" stroke-width="2" />
+        <path d="M110 110h56v8h-24v52h24v8h-56v-8h24v-52h-24z" fill="var(--primary)" />
+        <path d="M100 110v68 M96 110h8 M96 178h8" stroke-width="1.6" />
+        <path d="M200 112h86 M200 130h70 M200 148h80" stroke={S} stroke-width="6" />
+        <path d="M84 230h60 M84 240h40" stroke={S} stroke-width="3" />
+        <path d="M232 228l100-92" stroke-width="12" />
+        <path d="M232 228l100-92" stroke="var(--accent)" stroke-width="7" />
+        <path d="M232 228l-10 18 16-8z" fill="#1b1f24" />
+        <path d="M282 60h80v18h-80z M296 78v36 M322 78v22" fill={S} />
+      </>
+    )}
+
+    {kind === 'laborer' && (
+      <>
+        <path d="M90 170h170l-26 66H118z" fill="var(--primary)" />
+        <path d="M260 170l70-40 M118 236l-26 26 M234 236l20 26" stroke-width="6" />
+        <circle cx="176" cy="262" r="20" fill="#1b1f24" /><circle cx="176" cy="262" r="7" fill={S} />
+        <path d="M120 170l20-44h28l-10 44 M176 170l26-58 20 6-16 52 M214 170l30-36 16 12-14 24" fill={S} />
+        <path d="M262 92c0-30 18-46 40-46s40 16 40 46z" fill="var(--accent)" />
+        <path d="M252 92h100v12H252z" fill="var(--accent)" />
+        <path d="M302 46v46" stroke-width="2" opacity=".5" />
+      </>
+    )}
+
+    {kind === 'turner' && (
+      <>
+        <rect x="60" y="120" width="70" height="110" rx="6" fill={S3} />
+        <rect x="128" y="138" width="22" height="74" fill={S} />
+        <path d="M150 156h170v42H150z" fill={S2} />
+        <path d="M150 156h90v42h-90z" fill={S} />
+        <path d="M166 156v42 M184 156v42 M202 156v42 M220 156v42" stroke-width="1.6" opacity=".45" />
+        <rect x="320" y="166" width="22" height="22" fill={S3} />
+        <path d="M232 198l14 34h40v20h-62z" fill="var(--primary)" />
+        <path d="M240 198l-6 10h18z" fill="var(--accent)" />
+        <path d="M244 150c-6-16 10-30 22-20s-2 26-16 18 0-30 22-26" fill="none" stroke="var(--accent)" stroke-width="3" />
+        <path d="M60 262h290" stroke-width="5" />
+        <path d="M84 230v32 M300 252v10" stroke-width="5" />
+      </>
+    )}
+  </g>
+</svg>
+
+<style>
+  .illo { width: 100%; height: auto; max-width: 480px; }
+</style>

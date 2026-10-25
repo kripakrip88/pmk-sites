@@ -5,8 +5,10 @@ import Home from '@site/Home.astro';
 import site from '../lib/site.js';
 
 const c = site.contacts;
+// Сайты вакансий (kind: 'job') — не услуга: разметку Service не отдаём, только FAQ.
+// JobPosting без названия работодателя невалиден, а название на этих сайтах не показываем.
 const schema = [
-  {
+  site.kind !== 'job' && {
     '@context': 'https://schema.org',
     '@type': 'Service',
     name: site.service,
@@ -27,7 +29,7 @@ const schema = [
     '@type': 'FAQPage',
     mainEntity: site.faq.map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })),
   },
-];
+].filter(Boolean) as object[];
 ---
 <Layout title={site.seo.title} description={site.seo.description} schema={schema}>
   <Home />

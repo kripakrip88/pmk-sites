@@ -1,0 +1,32 @@
+/* Шов — работа-сварщиком-хабаровск.рф. Оформление сайта вакансий: шрифты и цвета поверх общего шаблона sites/_rabota. */
+@import '@fontsource/oswald/cyrillic-500.css';
+@import '@fontsource/oswald/latin-500.css';
+@import '@fontsource/oswald/cyrillic-600.css';
+@import '@fontsource/oswald/latin-600.css';
+@import '@fontsource/pt-sans/cyrillic-400.css';
+@import '@fontsource/pt-sans/latin-400.css';
+@import '@fontsource/pt-sans/cyrillic-700.css';
+@import '@fontsource/pt-sans/latin-700.css';
+
+:root {
+  --bg: #111418;
+  --fg: #eef1f4;
+  --muted: #9aa4ae;
+  --line: #262c33;
+  --card: #171b21;
+  --soft: #1c2128;
+  --primary: #38bdf8;
+  --primary-ink: #04121c;
+  --accent: #f59e0b;
+  --band: #0e3a52;
+  --band-ink: #ffffff;
+  --illo-ink: #d7dde3;
+
+  --f-head: 'Oswald', Arial, sans-serif;
+  --f-text: 'PT Sans', -apple-system, 'Segoe UI', Arial, sans-serif;
+  --head-weight: 600;
+  --head-case: uppercase;
+  --head-track: 0.01em;
+  --r: 4px;
+  --r-btn: 4px;
+}

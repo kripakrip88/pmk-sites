@@ -1,0 +1,34 @@
+/* Колер — работа-маляром-хабаровск.рф. Оформление сайта вакансий: шрифты и цвета поверх общего шаблона sites/_rabota. */
+@import '@fontsource/nunito/cyrillic-800.css';
+@import '@fontsource/nunito/latin-800.css';
+@import '@fontsource/nunito/cyrillic-900.css';
+@import '@fontsource/nunito/latin-900.css';
+@import '@fontsource/nunito-sans/cyrillic-400.css';
+@import '@fontsource/nunito-sans/latin-400.css';
+@import '@fontsource/nunito-sans/cyrillic-600.css';
+@import '@fontsource/nunito-sans/latin-600.css';
+@import '@fontsource/nunito-sans/cyrillic-700.css';
+@import '@fontsource/nunito-sans/latin-700.css';
+
+:root {
+  --bg: #fffaf6;
+  --fg: #2a1320;
+  --muted: #7a5d6b;
+  --line: #f3e2d9;
+  --card: #ffffff;
+  --soft: #fdeee6;
+  --primary: #db2777;
+  --primary-ink: #ffffff;
+  --accent: #f59e0b;
+  --band: #db2777;
+  --band-ink: #ffffff;
+  --illo-ink: #2a1320;
+
+  --f-head: 'Nunito', Arial, sans-serif;
+  --f-text: 'Nunito Sans', -apple-system, 'Segoe UI', Arial, sans-serif;
+  --head-weight: 900;
+  --head-case: none;
+  --head-track: -0.02em;
+  --r: 24px;
+  --r-btn: 999px;
+}

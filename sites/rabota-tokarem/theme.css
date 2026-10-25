@@ -1,0 +1,32 @@
+/* Резец — работа-токарем-хабаровск.рф. Оформление сайта вакансий: шрифты и цвета поверх общего шаблона sites/_rabota. */
+@import '@fontsource/fira-sans/cyrillic-700.css';
+@import '@fontsource/fira-sans/latin-700.css';
+@import '@fontsource/fira-sans/cyrillic-800.css';
+@import '@fontsource/fira-sans/latin-800.css';
+@import '@fontsource/roboto/cyrillic-400.css';
+@import '@fontsource/roboto/latin-400.css';
+@import '@fontsource/roboto/cyrillic-500.css';
+@import '@fontsource/roboto/latin-500.css';
+
+:root {
+  --bg: #f5f6f7;
+  --fg: #16202a;
+  --muted: #5a6672;
+  --line: #dfe3e7;
+  --card: #ffffff;
+  --soft: #e9edf0;
+  --primary: #0369a1;
+  --primary-ink: #ffffff;
+  --accent: #ea8a3c;
+  --band: #16202a;
+  --band-ink: #ffffff;
+  --illo-ink: #16202a;
+
+  --f-head: 'Fira Sans', Arial, sans-serif;
+  --f-text: 'Roboto', -apple-system, 'Segoe UI', Arial, sans-serif;
+  --head-weight: 800;
+  --head-case: none;
+  --head-track: -0.02em;
+  --r: 8px;
+  --r-btn: 8px;
+}

@@ -1,0 +1,30 @@
+/* Рабочие руки — работа-разнорабочий-хабаровск.рф. Оформление сайта вакансий: шрифты и цвета поверх общего шаблона sites/_rabota. */
+@import '@fontsource/ubuntu/cyrillic-500.css';
+@import '@fontsource/ubuntu/latin-500.css';
+@import '@fontsource/ubuntu/cyrillic-700.css';
+@import '@fontsource/ubuntu/latin-700.css';
+@import '@fontsource/ubuntu/cyrillic-400.css';
+@import '@fontsource/ubuntu/latin-400.css';
+
+:root {
+  --bg: #faf6ee;
+  --fg: #2b2118;
+  --muted: #6e5f50;
+  --line: #ebe2d3;
+  --card: #ffffff;
+  --soft: #f1e8d8;
+  --primary: #92400e;
+  --primary-ink: #ffffff;
+  --accent: #ca8a04;
+  --band: #2b2118;
+  --band-ink: #ffffff;
+  --illo-ink: #2b2118;
+
+  --f-head: 'Ubuntu', Arial, sans-serif;
+  --f-text: 'Ubuntu', -apple-system, 'Segoe UI', Arial, sans-serif;
+  --head-weight: 700;
+  --head-case: none;
+  --head-track: -0.01em;
+  --r: 10px;
+  --r-btn: 8px;
+}

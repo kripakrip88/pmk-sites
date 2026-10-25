@@ -1,0 +1,34 @@
+/* Верстак — работа-слесарем-хабаровск.рф. Оформление сайта вакансий: шрифты и цвета поверх общего шаблона sites/_rabota. */
+@import '@fontsource/exo-2/cyrillic-700.css';
+@import '@fontsource/exo-2/latin-700.css';
+@import '@fontsource/exo-2/cyrillic-800.css';
+@import '@fontsource/exo-2/latin-800.css';
+@import '@fontsource/fira-sans/cyrillic-400.css';
+@import '@fontsource/fira-sans/latin-400.css';
+@import '@fontsource/fira-sans/cyrillic-500.css';
+@import '@fontsource/fira-sans/latin-500.css';
+@import '@fontsource/fira-sans/cyrillic-600.css';
+@import '@fontsource/fira-sans/latin-600.css';
+
+:root {
+  --bg: #f7f5ef;
+  --fg: #1f2a1a;
+  --muted: #5f6b58;
+  --line: #e2ded1;
+  --card: #ffffff;
+  --soft: #ecebdf;
+  --primary: #4d7c0f;
+  --primary-ink: #ffffff;
+  --accent: #d97706;
+  --band: #1f2a1a;
+  --band-ink: #ffffff;
+  --illo-ink: #1f2a1a;
+
+  --f-head: 'Exo 2', Arial, sans-serif;
+  --f-text: 'Fira Sans', -apple-system, 'Segoe UI', Arial, sans-serif;
+  --head-weight: 800;
+  --head-case: none;
+  --head-track: -0.02em;
+  --r: 14px;
+  --r-btn: 10px;
+}

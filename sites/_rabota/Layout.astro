@@ -1,0 +1,98 @@
+---
+// Общий каркас сайтов вакансий. Сайт подключает его из своего Layout.astro после своего theme.css.
+// Вариант шапки — site.theme.header: 'light' (светлая, линия снизу) | 'solid' (в цвет сайта) | 'float' (плашка).
+import './base.css';
+import Head from '../../src/components/Head.astro';
+import Icon from './Icon.astro';
+import site, { phoneHref } from '../../src/lib/site.js';
+
+interface Props { title: string; description: string; noindex?: boolean; schema?: object[] }
+const props = Astro.props;
+const home = Astro.url.pathname === '/';
+const to = (hash: string) => (home ? hash : '/' + hash);
+const c = site.contacts;
+const t = site.theme;
+const year = new Date().getFullYear();
+// меню — из разделов этого сайта и в их порядке
+const names: Record<string, string> = { offer: 'Условия', jobs: 'Вакансии', duties: 'Обязанности', steps: 'Как устроиться', faq: 'Вопросы' };
+const nav = (t.order as string[]).map((id) => ['#' + id, names[id]]);
+---
+<!doctype html>
+<html lang="ru">
+  <head>
+    <Head {...props} />
+    <meta name="theme-color" content={t.themeColor} />
+  </head>
+  <body>
+    <header class:list={['hdr', `hdr--${t.header}`]}>
+      <div class="wrap hdr__in">
+        <a class="logo" href="/" aria-label={`${site.brand.name} — на главную`}>
+          <span class="logo__mark" aria-hidden="true">{site.brand.mark}</span>
+          <span class="logo__word">{site.brand.name}</span>
+        </a>
+        <nav class="hdr__nav" aria-label="Разделы">
+          {nav.map(([h, n]) => <a href={to(h)}>{n}</a>)}
+        </nav>
+        <a class="hdr__phone" href={phoneHref} aria-label={`Позвонить: ${c.phone}`}><Icon name="phone" size={17} /><span>{c.phone}</span></a>
+        <a class="btn btn--primary hdr__cta" href={to('#apply')}>Откликнуться</a>
+      </div>
+    </header>
+
+    <main><slot /></main>
+
+    <footer class="ftr">
+      <div class="wrap ftr__in">
+        <div class="ftr__brand">
+          <a class="logo" href="/"><span class="logo__mark" aria-hidden="true">{site.brand.mark}</span><span class="logo__word">{site.brand.name}</span></a>
+          <p>{site.footer}</p>
+        </div>
+        <div class="ftr__col">
+          <a href={phoneHref}>{c.phone}</a>
+          <span>{c.hours}</span>
+          <span>{c.address}</span>
+        </div>
+      </div>
+      <div class="wrap ftr__bottom">
+        <span>© {year} {site.brand.name}</span>
+        <a href="/politika/">Политика обработки персональных данных</a>
+      </div>
+    </footer>
+  </body>
+</html>
+
+<style>
+  .hdr { position: sticky; top: 0; z-index: 40; }
+  .hdr__in { display: flex; align-items: center; gap: 24px; height: 72px; }
+  .hdr--light { background: color-mix(in srgb, var(--bg) 92%, transparent); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
+  .hdr--solid { background: var(--primary); color: var(--primary-ink); }
+  .hdr--solid .hdr__cta { background: var(--primary-ink); color: var(--primary); }
+  .hdr--solid .logo__mark { background: var(--primary-ink); color: var(--primary); }
+  .hdr--float { padding-top: 12px; }
+  .hdr--float .hdr__in { background: var(--card); border: 1px solid var(--line); border-radius: calc(var(--r) + 4px); padding: 0 12px 0 18px; height: 64px; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06); }
+  .logo { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; margin-right: auto; }
+  .logo__mark { width: 34px; height: 34px; display: grid; place-items: center; border-radius: var(--r-btn); background: var(--primary); color: var(--primary-ink); font: var(--head-weight) 15px/1 var(--f-head); }
+  .logo__word { font: var(--head-weight) 19px/1 var(--f-head); letter-spacing: var(--head-track); white-space: nowrap; }
+  .hdr__nav { display: flex; gap: 24px; font-size: 15px; font-weight: 500; }
+  .hdr__nav a { text-decoration: none; opacity: 0.75; }
+  .hdr__nav a:hover { opacity: 1; }
+  .hdr__phone { display: flex; align-items: center; gap: 8px; font-weight: 600; text-decoration: none; white-space: nowrap; }
+  .hdr__cta { padding: 12px 18px; font-size: 15px; }
+  @media (max-width: 1060px) { .hdr__nav { display: none; } }
+  @media (max-width: 600px) {
+    .hdr__in { gap: 10px; height: 62px; }
+    .hdr__phone span { display: none; }
+    .logo__word { font-size: 16px; }
+    .hdr__cta { padding: 11px 12px; font-size: 14px; }
+  }
+  @media (max-width: 380px) { .logo__word { display: none; } }
+
+  .ftr { border-top: 1px solid var(--line); padding: 40px 0 24px; font-size: 15px; color: var(--muted); }
+  .ftr__in { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 24px; }
+  .ftr__brand { display: grid; gap: 12px; max-width: 420px; }
+  .ftr__brand .logo { color: var(--fg); }
+  .ftr__col { display: grid; gap: 4px; text-align: right; }
+  .ftr__col a { color: var(--fg); font-weight: 600; text-decoration: none; }
+  .ftr__bottom { position: relative; display: flex; flex-wrap: wrap; gap: 8px 24px; margin-top: 28px; padding-top: 20px; font-size: 13px; }
+  .ftr__bottom::before { content: ''; position: absolute; top: 0; left: var(--pad); right: var(--pad); height: 1px; background: var(--line); }
+  @media (max-width: 640px) { .ftr__col { text-align: left; } }
+</style>

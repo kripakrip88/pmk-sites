@@ -1,0 +1,67 @@
+/* Общий шаблон сайтов вакансий (sites/_rabota). Композиция по мотивам Astroship — код свой
+   (у темы GPL-3.0, копировать её код в публичный репо нельзя).
+   Всё видимое различие сайтов — в переменных theme.css каждого сайта: цвета, шрифты, скругления,
+   регистр заголовков; раскладка (сторона иллюстрации, порядок разделов, шапка) — в site.json → theme. */
+:root {
+  --bg: #ffffff;
+  --fg: #111111;
+  --muted: #5f6368;
+  --line: #e5e7eb;
+  --card: #ffffff;
+  --soft: #f3f4f6;
+  --primary: #111111;
+  --primary-ink: #ffffff;
+  --primary-text: var(--primary); /* цвет-акцент для текста и контуров; у светлых основных (жёлтый) — свой, тёмный */
+  --accent: #f59e0b;
+  --band: #111111;       /* фон карточки-призыва */
+  --band-ink: #ffffff;
+
+  --f-head: Arial, sans-serif;
+  --f-text: -apple-system, 'Segoe UI', Arial, sans-serif;
+  --head-weight: 800;
+  --head-case: none;
+  --head-track: -0.02em;
+
+  --r: 12px;
+  --r-btn: 10px;
+  --maxw: 1160px;
+  --pad: 32px;
+}
+@media (max-width: 640px) { :root { --pad: 16px; } }
+
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; scroll-padding-top: 84px; }
+body { margin: 0; background: var(--bg); color: var(--fg); font: 400 17px/1.6 var(--f-text); -webkit-font-smoothing: antialiased; }
+h1, h2, h3 { margin: 0; font-family: var(--f-head); font-weight: var(--head-weight); line-height: 1.1; letter-spacing: var(--head-track); text-transform: var(--head-case); }
+h2 { font-size: clamp(28px, 3.6vw, 44px); }
+h3 { font-size: 19px; line-height: 1.25; text-transform: none; letter-spacing: -0.01em; }
+p { margin: 0; }
+a { color: inherit; }
+svg { display: block; }
+:focus-visible { outline: 2px solid var(--primary); outline-offset: 3px; }
+
+.wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 var(--pad); }
+.sec { padding: 88px 0; }
+.sec__head { max-width: 720px; margin-bottom: 40px; display: grid; gap: 12px; }
+.sec__head p { color: var(--muted); font-size: 18px; }
+@media (max-width: 640px) { .sec { padding: 60px 0; } .sec__head { margin-bottom: 28px; } }
+
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  font: 600 16px/1 var(--f-text); padding: 16px 24px; border-radius: var(--r-btn); border: 2px solid transparent;
+  cursor: pointer; text-decoration: none; white-space: nowrap; transition: background 0.15s, color 0.15s, border-color 0.15s, transform 0.15s;
+}
+.btn:active { transform: translateY(1px); }
+.btn--primary { background: var(--primary); color: var(--primary-ink); }
+.btn--primary:hover { background: color-mix(in srgb, var(--primary) 86%, var(--fg)); }
+.btn--outline { background: transparent; color: var(--fg); border-color: var(--fg); }
+.btn--outline:hover { background: var(--fg); color: var(--bg); }
+
+/* страницы-документы: политика, 404 */
+.legal { max-width: 760px; margin: 0 auto; padding: 64px var(--pad) 96px; }
+.legal h1 { font-size: clamp(26px, 4vw, 38px); margin-bottom: 28px; }
+.legal h2 { font-size: 19px; margin: 28px 0 8px; text-transform: none; }
+.legal p { color: var(--muted); }
+.legal a { color: var(--primary-text); text-underline-offset: 3px; }
+
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { transition: none !important; animation: none !important; } }

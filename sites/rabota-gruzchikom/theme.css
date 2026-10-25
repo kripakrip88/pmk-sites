@@ -1,0 +1,33 @@
+/* Погрузка — работа-грузчиком-хабаровск.рф. Оформление сайта вакансий: шрифты и цвета поверх общего шаблона sites/_rabota. */
+@import '@fontsource/russo-one/cyrillic-400.css';
+@import '@fontsource/russo-one/latin-400.css';
+@import '@fontsource/roboto/cyrillic-400.css';
+@import '@fontsource/roboto/latin-400.css';
+@import '@fontsource/roboto/cyrillic-500.css';
+@import '@fontsource/roboto/latin-500.css';
+@import '@fontsource/roboto/cyrillic-700.css';
+@import '@fontsource/roboto/latin-700.css';
+
+:root {
+  --bg: #fffdf3;
+  --fg: #141414;
+  --muted: #5c5a50;
+  --line: #ece6c8;
+  --card: #ffffff;
+  --soft: #fbf3cf;
+  --primary: #facc15;
+  --primary-ink: #141414;
+  --primary-text: #141414;
+  --accent: #141414;
+  --band: #141414;
+  --band-ink: #ffffff;
+  --illo-ink: #141414;
+
+  --f-head: 'Russo One', Arial, sans-serif;
+  --f-text: 'Roboto', -apple-system, 'Segoe UI', Arial, sans-serif;
+  --head-weight: 400;
+  --head-case: uppercase;
+  --head-track: 0;
+  --r: 0px;
+  --r-btn: 0px;
+}

@@ -1,0 +1,8 @@
+---
+// Сайт вакансий: свои цвета и шрифты (theme.css) поверх общего шаблона sites/_rabota.
+import '../_rabota/base.css';
+import './theme.css';
+import Base from '../_rabota/Layout.astro';
+const props = Astro.props;
+---
+<Base {...props}><slot /></Base>

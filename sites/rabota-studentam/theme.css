@@ -1,0 +1,32 @@
+/* Первый разряд — работа-студентам-хабаровск.рф. Оформление сайта вакансий: шрифты и цвета поверх общего шаблона sites/_rabota. */
+@import '@fontsource/montserrat-alternates/cyrillic-700.css';
+@import '@fontsource/montserrat-alternates/latin-700.css';
+@import '@fontsource/montserrat/cyrillic-400.css';
+@import '@fontsource/montserrat/latin-400.css';
+@import '@fontsource/montserrat/cyrillic-500.css';
+@import '@fontsource/montserrat/latin-500.css';
+@import '@fontsource/montserrat/cyrillic-600.css';
+@import '@fontsource/montserrat/latin-600.css';
+
+:root {
+  --bg: #f6f4ff;
+  --fg: #1e1537;
+  --muted: #625b7c;
+  --line: #e4defa;
+  --card: #ffffff;
+  --soft: #ece7ff;
+  --primary: #7c3aed;
+  --primary-ink: #ffffff;
+  --accent: #06b6d4;
+  --band: #1e1537;
+  --band-ink: #ffffff;
+  --illo-ink: #1e1537;
+
+  --f-head: 'Montserrat Alternates', Arial, sans-serif;
+  --f-text: 'Montserrat', -apple-system, 'Segoe UI', Arial, sans-serif;
+  --head-weight: 700;
+  --head-case: none;
+  --head-track: -0.02em;
+  --r: 20px;
+  --r-btn: 999px;
+}

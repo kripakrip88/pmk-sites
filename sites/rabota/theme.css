@@ -1,0 +1,30 @@
+/* Работа на заводе — работа-хабаровск.рф. Оформление сайта вакансий: шрифты и цвета поверх общего шаблона sites/_rabota. */
+@import '@fontsource/raleway/cyrillic-800.css';
+@import '@fontsource/raleway/latin-800.css';
+@import '@fontsource/open-sans/cyrillic-400.css';
+@import '@fontsource/open-sans/latin-400.css';
+@import '@fontsource/open-sans/cyrillic-600.css';
+@import '@fontsource/open-sans/latin-600.css';
+
+:root {
+  --bg: #ffffff;
+  --fg: #1c1917;
+  --muted: #6b625d;
+  --line: #eee7e3;
+  --card: #ffffff;
+  --soft: #fbf2f0;
+  --primary: #be123c;
+  --primary-ink: #ffffff;
+  --accent: #0ea5e9;
+  --band: #1c1917;
+  --band-ink: #ffffff;
+  --illo-ink: #1c1917;
+
+  --f-head: 'Raleway', Arial, sans-serif;
+  --f-text: 'Open Sans', -apple-system, 'Segoe UI', Arial, sans-serif;
+  --head-weight: 800;
+  --head-case: none;
+  --head-track: -0.02em;
+  --r: 12px;
+  --r-btn: 10px;
+}
