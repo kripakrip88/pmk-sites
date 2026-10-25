@@ -1,0 +1,99 @@
+---
+import './styles.css';
+import Head from '../../src/components/Head.astro';
+import Logo from './Logo.astro';
+import site, { phoneHref } from '../../src/lib/site.js';
+
+interface Props { title: string; description: string; noindex?: boolean; schema?: object[] }
+const props = Astro.props;
+const home = Astro.url.pathname === '/';
+const to = (hash: string) => (home ? hash : '/' + hash);
+const c = site.contacts;
+const year = new Date().getFullYear();
+---
+<!doctype html>
+<html lang="ru">
+  <head>
+    <Head {...props} />
+    <meta name="theme-color" content="#0f2742" />
+  </head>
+  <body>
+    <header class="hdr">
+      <div class="wrap hdr__in">
+        <a class="hdr__logo" href="/" aria-label={`${site.brand.name} — ${site.brand.tagline}, на главную`}><Logo /></a>
+        <nav class="hdr__nav" aria-label="Разделы">
+          <a href={to('#materials')}>Материалы</a>
+          <a href={to('#steps')}>Порядок работы</a>
+          <a href={to('#faq')}>Вопросы</a>
+        </nav>
+        <a class="hdr__phone mono" href={phoneHref} aria-label={`Позвонить: ${c.phone}`}>
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M5 3h4l2 5-2.5 1.5a11 11 0 0 0 6 6L16 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 5a2 2 0 0 1 2-2"/></svg>
+          <span>{c.phone}</span>
+        </a>
+        <a class="btn btn--laser hdr__cta" href={to('#lead')}>Рассчитать</a>
+      </div>
+    </header>
+
+    <main><slot /></main>
+
+    <footer class="ftr">
+      <div class="wrap ftr__in">
+        <div class="ftr__brand">
+          <Logo light />
+          <p>{site.service} {site.cityIn}. Резка по чертежам от одной детали.</p>
+        </div>
+        <div>
+          <div class="ftr__k mono">Телефон</div>
+          <a class="ftr__phone" href={phoneHref}>{c.phone}</a>
+          <p class="ftr__muted">{c.hours}</p>
+        </div>
+        <div>
+          <div class="ftr__k mono">Производство</div>
+          <p>{c.address}</p>
+          {c.email && <p><a href={`mailto:${c.email}`}>{c.email}</a></p>}
+          <p class="ftr__msg">
+            {c.whatsapp && <a href={c.whatsapp} target="_blank" rel="noopener">WhatsApp</a>}
+            {c.telegram && <a href={c.telegram} target="_blank" rel="noopener">Telegram</a>}
+          </p>
+        </div>
+      </div>
+      <div class="wrap ftr__bottom mono">
+        <span>© {year} {site.brand.name}</span>
+        <a href="/politika/">Политика обработки персональных данных</a>
+        <span>Не является публичной офертой</span>
+      </div>
+    </footer>
+  </body>
+</html>
+
+<style>
+  .hdr { position: sticky; top: 0; z-index: 40; background: rgba(243, 241, 236, 0.94); backdrop-filter: blur(8px); border-bottom: 1px solid var(--ink); }
+  .hdr__in { display: flex; align-items: center; gap: 32px; height: 68px; }
+  .hdr__logo { margin-right: auto; text-decoration: none; }
+  .hdr__nav { display: flex; gap: 28px; font: 500 13px/1 var(--f-mono); text-transform: uppercase; letter-spacing: 0.05em; }
+  .hdr__nav a { text-decoration: none; color: var(--muted); }
+  .hdr__nav a:hover { color: var(--ink); }
+  .hdr__phone { display: flex; align-items: center; gap: 8px; font-size: 16px; font-weight: 500; text-decoration: none; white-space: nowrap; }
+  .hdr__cta { padding: 13px 20px; font-size: 15px; }
+  @media (max-width: 980px) { .hdr__nav { display: none; } }
+  @media (max-width: 640px) {
+    .hdr__in { gap: 10px; height: 60px; }
+    .hdr__phone span { display: none; }
+    .hdr__phone { width: 44px; height: 44px; justify-content: center; box-shadow: inset 0 0 0 1px var(--ink); border-radius: var(--r); }
+    .hdr__cta { padding: 13px 14px; }
+  }
+
+  .ftr { background: var(--ink); color: var(--on-ink); padding: 64px 0 28px; }
+  .ftr__in { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) minmax(0, 1fr); gap: 40px; padding-bottom: 48px; }
+  .ftr__brand p { color: var(--on-ink-muted); margin-top: 18px; max-width: 340px; font-size: 15px; }
+  .ftr__k { font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--on-ink-muted); margin-bottom: 12px; }
+  .ftr__phone { font: 600 24px/1.2 var(--f-head); text-decoration: none; display: inline-block; margin-bottom: 6px; }
+  .ftr a:hover { color: var(--laser); }
+  .ftr p + p { margin-top: 6px; }
+  .ftr__muted { color: var(--on-ink-muted); font-size: 15px; }
+  .ftr__msg { display: flex; gap: 16px; font-weight: 600; }
+  .ftr__msg:empty { display: none; }
+  .ftr__bottom { display: flex; flex-wrap: wrap; gap: 8px 32px; padding-top: 24px; border-top: 1px solid var(--rule-on-ink); font-size: 12px; color: var(--on-ink-muted); }
+  .ftr__bottom a { text-underline-offset: 3px; }
+  @media (max-width: 820px) { .ftr__in { grid-template-columns: minmax(0, 1fr); gap: 28px; } }
+</style>

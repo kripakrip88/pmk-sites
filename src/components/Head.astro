@@ -1,0 +1,52 @@
+---
+// Общее «невидимое» содержимое <head>: SEO, Open Graph, schema.org, Метрика, цели.
+// Вставляется в Layout.astro каждого сайта. Шрифты и стили — в самом сайте.
+import site from '../lib/site.js';
+
+interface Props {
+  title: string;
+  description: string;
+  noindex?: boolean;
+  schema?: object[];
+}
+const { title, description, noindex = false, schema = [] } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const ym = site.metrika;
+---
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>{title}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonical} />
+{noindex && <meta name="robots" content="noindex, follow" />}
+<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+<meta property="og:type" content="website" />
+<meta property="og:locale" content="ru_RU" />
+<meta property="og:site_name" content={site.brand.name} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonical} />
+{schema.map((s) => <script type="application/ld+json" set:html={JSON.stringify(s)} />)}
+{ym && (
+  <script is:inline define:vars={{ ym }}>
+    (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+    m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+    (window,document,'script','https://mc.yandex.ru/metrika/tag.js','ym');
+    window.ym(ym,'init',{clickmap:true,trackLinks:true,accurateTrackBounce:true,webvisor:true});
+    window.PMK_YM = ym;
+  </script>
+)}
+<script>
+  // Цели Метрики: phone_click, email_click, messenger_click (lead_sent — в lead-form.js).
+  import { goal } from '../lib/goal.js';
+  import { initLeadForms } from '../lib/lead-form.js';
+  document.addEventListener('click', (e) => {
+    const a = (e.target as HTMLElement).closest('a');
+    if (!a) return;
+    const href = a.getAttribute('href') || '';
+    if (href.startsWith('tel:')) goal('phone_click');
+    else if (href.startsWith('mailto:')) goal('email_click');
+    else if (/wa\.me|whatsapp|t\.me|max\.ru/.test(href)) goal('messenger_click');
+  });
+  initLeadForms();
+</script>

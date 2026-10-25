@@ -1,0 +1,71 @@
+---
+// Форма «Кромки». Логика отправки общая — src/lib/lead-form.js (контракт разметки описан там).
+---
+<form class="lf" data-lead-form novalidate>
+  <div class="lf__head mono"><span>Заявка на расчёт</span><span>Лист 01</span></div>
+
+  <label class="lf__drop">
+    <input name="files" type="file" multiple accept=".dxf,.dwg,.pdf,.jpg,.jpeg,.png,.heic,.zip,.rar,.7z,.step,.stp" />
+    <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M14 3H6v18h12V7z M14 3v4h4 M12 17v-6 M9 13.5l3-3 3 3" /></svg>
+    <span><b data-lead-files>Прикрепите чертёж</b><small class="mono">DXF · DWG · PDF · фото — до 20 МБ</small></span>
+  </label>
+
+  <div class="lf__row">
+    <label class="lf__f">
+      <span class="mono">Телефон *</span>
+      <input name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+7" required />
+    </label>
+    <label class="lf__f">
+      <span class="mono">Имя</span>
+      <input name="name" type="text" autocomplete="name" maxlength="200" />
+    </label>
+  </div>
+  <label class="lf__f">
+    <span class="mono">Металл, толщина, количество</span>
+    <textarea name="comment" rows="2" maxlength="5000" placeholder="Например: Ст3, 10 мм, 40 шт"></textarea>
+  </label>
+  <label class="lf__hp" aria-hidden="true">Сайт <input name="website" tabindex="-1" autocomplete="off" /></label>
+
+  <label class="lf__consent">
+    <input name="consent" type="checkbox" value="true" required />
+    <span>Согласен на <a href="/politika/" target="_blank">обработку персональных данных</a></span>
+  </label>
+  <button class="btn btn--laser lf__btn" type="submit">Получить расчёт <span class="btn__arrow">→</span></button>
+  <p class="lf__status" data-lead-status role="status" aria-live="polite"></p>
+</form>
+
+<style>
+  .lf { background: var(--sheet); color: var(--ink); border: 1px solid var(--ink); border-radius: var(--r); padding: 0 28px 28px; display: grid; gap: 20px; box-shadow: 10px 10px 0 rgba(15, 39, 66, 0.25); }
+  .lf__head { display: flex; justify-content: space-between; margin: 0 -28px; padding: 12px 28px; border-bottom: 1px solid var(--ink); font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; }
+  .lf__drop { position: relative; display: flex; align-items: center; gap: 16px; padding: 22px 20px; border: 1.5px dashed var(--laser); border-radius: var(--r); background: rgba(255, 90, 31, 0.05); cursor: pointer; transition: background 0.15s; }
+  .lf__drop:hover, .lf__drop:focus-within { background: rgba(255, 90, 31, 0.1); }
+  .lf__drop input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+  .lf__drop svg { color: var(--laser); flex: none; }
+  .lf__drop span { display: grid; gap: 4px; }
+  .lf__drop b { font-weight: 600; }
+  .lf__drop small { font-size: 12px; color: var(--muted); }
+  .lf__row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 20px; }
+  .lf__f { display: grid; gap: 4px; }
+  .lf__f span { font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); }
+  .lf__f input, .lf__f textarea {
+    font: 400 17px/1.4 var(--f-text); color: var(--ink); background: transparent; width: 100%;
+    border: 0; border-bottom: 1px solid var(--rule-strong); border-radius: 0; padding: 8px 0; resize: vertical;
+  }
+  .lf__f input:focus, .lf__f textarea:focus { outline: none; border-bottom: 2px solid var(--laser); padding-bottom: 7px; }
+  .lf__hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+  .lf__consent { display: flex; gap: 10px; align-items: flex-start; font-size: 13px; color: var(--muted); }
+  .lf__consent input { width: 18px; height: 18px; margin: 1px 0 0; accent-color: var(--laser); flex: none; }
+  .lf__consent a { color: var(--ink); text-underline-offset: 2px; }
+  .lf__btn { width: 100%; }
+  .lf__btn:disabled { opacity: 0.6; cursor: wait; }
+  .lf__status { font-size: 14px; font-weight: 600; }
+  .lf__status:empty { display: none; }
+  .lf__status[data-state='error'] { color: #c2410c; }
+  .lf__status[data-state='ok'] { color: #1d6b3a; }
+  .lf__status[data-state='busy'] { color: var(--muted); }
+  @media (max-width: 640px) {
+    .lf { padding: 0 18px 22px; box-shadow: 6px 6px 0 rgba(15, 39, 66, 0.25); }
+    .lf__head { margin: 0 -18px; padding: 12px 18px; }
+    .lf__row { grid-template-columns: minmax(0, 1fr); }
+  }
+</style>

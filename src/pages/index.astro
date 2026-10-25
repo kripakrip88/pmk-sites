@@ -1,16 +1,10 @@
 ---
-import Base from '../layouts/Base.astro';
-import Hero from '../components/Hero.astro';
-import Materials from '../components/Materials.astro';
-import Steps from '../components/Steps.astro';
-import Advantages from '../components/Advantages.astro';
-import Faq from '../components/Faq.astro';
-import Cta from '../components/Cta.astro';
+// Главная = посадочная. Вёрстка и дизайн — sites/<SITE>/Home.astro, здесь только SEO-разметка.
+import Layout from '@site/Layout.astro';
+import Home from '@site/Home.astro';
 import site from '../lib/site.js';
-import { Content as Text } from '@site/text.md';
 
 const c = site.contacts;
-const url = Astro.site!.href;
 const schema = [
   {
     '@context': 'https://schema.org',
@@ -18,14 +12,14 @@ const schema = [
     name: site.service,
     serviceType: site.service,
     areaServed: { '@type': 'City', name: site.city },
-    url,
+    url: Astro.site!.href,
     provider: {
       '@type': 'LocalBusiness',
-      name: `${site.brand.name} — ${site.brand.tagline}`,
+      name: site.brand.name,
       telephone: c.phone,
-      email: c.email,
-      address: { '@type': 'PostalAddress', addressLocality: site.city, streetAddress: c.address.replace(/^г\.\s*[^,]+,\s*/, ''), addressCountry: 'RU' },
-      openingHours: 'Mo-Fr 09:00-18:00',
+      ...(c.email && { email: c.email }),
+      address: { '@type': 'PostalAddress', addressLocality: site.city, addressCountry: 'RU' },
+      openingHours: c.openingHours,
     },
   },
   {
@@ -35,23 +29,6 @@ const schema = [
   },
 ];
 ---
-<Base title={site.seo.title} description={site.seo.description} schema={schema}>
-  <Hero />
-  <Materials />
-  <Steps />
-  <Advantages />
-  <Cta />
-  <section class="section">
-    <div class="container article"><Text /></div>
-  </section>
-  <Faq />
-</Base>
-
-<style>
-  .article { max-width: 820px; }
-  .article :global(h2) { margin: 40px 0 16px; }
-  .article :global(h2:first-child) { margin-top: 0; }
-  .article :global(p), .article :global(li) { color: #3a424a; font-size: 17px; }
-  .article :global(p + p) { margin-top: 14px; }
-  .article :global(ul) { padding-left: 20px; margin: 16px 0; display: grid; gap: 8px; }
-</style>
+<Layout title={site.seo.title} description={site.seo.description} schema={schema}>
+  <Home />
+</Layout>

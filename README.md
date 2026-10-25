@@ -7,14 +7,13 @@
 Общий только «невидимый» код: форма заявки, SEO, сборка, деплой.
 Сборка даёт готовый HTML в `dist/<slug>/`.
 
-> ⚠ Пилот `lazernaya-rezka` пока в дизайне pmkpark.ru — по правилу его нужно переделать
-> в собственный дизайн.
+
 
 ## Сайты
 
 | Домен | slug | Статус |
 |---|---|---|
-| лазерная-резка-хабаровск.рф | `lazernaya-rezka` | 🟡 пилот собран, не опубликован |
+| лазерная-резка-хабаровск.рф | `lazernaya-rezka` | 🟡 «Кромка» — прототип дизайна, не опубликован |
 | плазменная-резка-хабаровск.рф | — | ⏳ |
 | порошковая-покраска-хабаровск.рф | — | ⏳ |
 | фундаментные-болты-хабаровск.рф | — | ⏳ |
@@ -31,14 +30,22 @@
 ## Структура
 
 ```
-sites/<slug>/site.json   # домен, SEO, контакты (подменный телефон!), блоки, FAQ
-sites/<slug>/text.md     # SEO-текст статьёй (уникальный для каждого сайта)
-src/components/          # блоки страницы: Hero, Materials, Steps, Advantages, Cta, Faq, LeadForm
-src/layouts/Base.astro   # <head>, Метрика, цели, шапка/подвал
-src/pages/               # главная, /politika/, 404, robots.txt, sitemap.xml
-pocketbase/              # миграция коллекции leads + хук (письмо, вебхук n8n)
-deploy/                  # nginx, Dockerfile PocketBase
-docker-compose.yml       # VPS: nginx + pocketbase + certbot
+sites/<slug>/               # ВСЁ видимое — у каждого сайта своё
+├── site.json               # домен, название, SEO, контакты (подменный телефон!), контент блоков, FAQ
+├── text.md                 # SEO-текст статьёй (уникальный)
+├── Layout.astro            # каркас страницы: шапка, подвал, шрифты, стили
+├── Home.astro              # посадочная: набор и порядок блоков
+├── styles.css              # палитра, шрифты, базовые стили сайта
+├── LeadForm.astro, …       # вёрстка формы и любые свои компоненты
+└── public/favicon.svg      # своя иконка
+src/                        # общее НЕвидимое
+├── components/Head.astro   # SEO, Open Graph, schema.org, Метрика, цели
+├── components/PolitikaText.astro  # текст политики ПДн (без оформления)
+├── lib/lead-form.js        # отправка формы в PocketBase (контракт разметки внутри)
+└── pages/                  # /, /politika/, 404, robots.txt, sitemap.xml → берут Layout/Home из сайта
+pocketbase/                 # миграция коллекции leads + хук (письмо, вебхук n8n)
+deploy/                     # nginx, Dockerfile PocketBase
+docker-compose.yml          # VPS: nginx + pocketbase + certbot
 ```
 
 ## Команды
@@ -56,7 +63,8 @@ npm run nginx                         # сгенерировать deploy/nginx/
 
 ## Новый сайт
 
-1. Скопировать `sites/lazernaya-rezka/` → `sites/<slug>/`.
+1. Создать `sites/<slug>/` со своими `Layout.astro`, `Home.astro`, `styles.css`, формой и `site.json`
+   (код можно подсмотреть у соседнего сайта, дизайн — нет).
 2. В `site.json` — домен, подменный телефон, счётчик Метрики, контент.
 3. Свой дизайн (палитра, шрифты, композиция) — согласовать концепцию, внести в `docs/designs.md`.
 4. `text.md` — **уникальный** текст (не копировать с pmkpark.ru и соседних сайтов).
@@ -74,6 +82,6 @@ UTM/yclid, страница, IP). Защита: honeypot-поле, обязат�
 
 ## Версии
 
-- Astro **7.3.8**, @fontsource/manrope **5.2.8** — точные версии в `package.json`.
+- Astro **7.3.8**, шрифты @fontsource — точные версии в `package.json`.
 - PocketBase **0.40.5** — `deploy/pocketbase/Dockerfile`. До 1.0 возможны несовместимые
   изменения: обновлять только осознанно, с проверкой формы.

@@ -1,0 +1,68 @@
+---
+// Чертёж фланца на первом экране: лазерная точка обходит контур и «прорезает» его.
+// Размеры условные — это иллюстрация, а не конкретное изделие.
+const cx = 180, cy = 150, R = 110, bolt = 76;
+const holes = Array.from({ length: 6 }, (_, i) => {
+  const a = (Math.PI / 3) * i - Math.PI / 6;
+  return { x: +(cx + bolt * Math.cos(a)).toFixed(1), y: +(cy + bolt * Math.sin(a)).toFixed(1) };
+});
+const lead = holes[5]; // отверстие справа сверху — к нему выноска
+const cut = `M${cx},${cy - R} A${R},${R} 0 1,1 ${cx - 0.01},${cy - R}`;
+---
+<figure class="dwg">
+  <svg viewBox="0 0 360 320" role="img" aria-label="Чертёж фланца: лазер вырезает деталь по контуру">
+    <defs>
+      <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse">
+        <path d="M0,1 L10,5 L0,9" fill="none" stroke="currentColor" stroke-width="1.4" />
+      </marker>
+      <radialGradient id="glow"><stop offset="0" stop-color="#ff5a1f" stop-opacity=".55" /><stop offset="1" stop-color="#ff5a1f" stop-opacity="0" /></radialGradient>
+    </defs>
+
+    <!-- осевые -->
+    <g class="axis">
+      <line x1="40" y1={cy} x2="320" y2={cy} />
+      <line x1={cx} y1="18" x2={cx} y2="282" />
+      <circle cx={cx} cy={cy} r={bolt} />
+    </g>
+
+    <!-- деталь -->
+    <g class="part">
+      <circle cx={cx} cy={cy} r={R} />
+      <circle cx={cx} cy={cy} r="38" />
+      {holes.map((h) => <circle cx={h.x} cy={h.y} r="11" />)}
+    </g>
+
+    <!-- рез -->
+    <path id="cut" class="cut" d={cut} pathLength="100" />
+    <g class="beam">
+      <circle r="16" fill="url(#glow)" />
+      <circle r="4.5" fill="#ff5a1f" />
+      <animateMotion dur="7s" repeatCount="indefinite" rotate="0"><mpath href="#cut" /></animateMotion>
+    </g>
+
+    <!-- размеры -->
+    <g class="dim">
+      <line x1={cx - R} y1={cy + 4} x2={cx - R} y2="306" />
+      <line x1={cx + R} y1={cy + 4} x2={cx + R} y2="306" />
+      <line x1={cx - R} y1="298" x2={cx + R} y2="298" marker-start="url(#arr)" marker-end="url(#arr)" />
+      <text x={cx} y="291" text-anchor="middle">⌀220</text>
+      <polyline points={`${lead.x + 8},${lead.y - 8} 272,34 356,34`} />
+      <text x="356" y="27" text-anchor="end">6 отв. ⌀22</text>
+      <text x="8" y="30">t = 12</text>
+      <text x="8" y="46" class="dim__muted">Ст3</text>
+    </g>
+  </svg>
+</figure>
+
+<style>
+  .dwg { margin: 0; color: var(--ink); }
+  .dwg svg { width: 100%; height: auto; overflow: visible; }
+  .axis { fill: none; stroke: var(--ink); stroke-width: 0.8; stroke-dasharray: 14 4 2 4; opacity: 0.45; }
+  .part { fill: none; stroke: var(--ink); stroke-width: 1.8; }
+  .cut { fill: none; stroke: var(--laser); stroke-width: 2.6; stroke-dasharray: 100; stroke-dashoffset: 0; animation: cut 7s linear infinite; }
+  @keyframes cut { from { stroke-dashoffset: 100; } to { stroke-dashoffset: 0; } }
+  .dim { fill: none; stroke: var(--ink); stroke-width: 0.9; color: var(--ink); }
+  .dim text { fill: var(--ink); stroke: none; font: 500 13px var(--f-mono); }
+  .dim__muted { fill: var(--muted) !important; }
+  @media (prefers-reduced-motion: reduce) { .beam { display: none; } }
+</style>

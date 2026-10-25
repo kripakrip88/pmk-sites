@@ -1,0 +1,262 @@
+---
+// Посадочная «Кромки». Порядок: чертёж → материалы → заявка → порядок работы → преимущества → справка → вопросы.
+import Drawing from './Drawing.astro';
+import LeadForm from './LeadForm.astro';
+import { Content as Text } from './text.md';
+import site, { phoneHref } from '../../src/lib/site.js';
+
+const h = site.hero;
+// короткие предлоги и союзы не оставляем висеть в конце строки
+const nb = (t: string) => t.replace(/(^|\s)(в|во|на|с|со|к|по|до|от|из|и|а|не|за|для)\s/gi, '$1$2\u00A0');
+const m = site.materials;
+const ticks = Array.from({ length: m.max / 10 + 1 }, (_, i) => i * 10);
+---
+<!-- 1. Первый экран: лист чертежа -->
+<section class="hero">
+  <div class="wrap">
+    <div class="sheet">
+      <div class="sheet__ruler" aria-hidden="true">{['A', 'B', 'C', 'D', 'E', 'F'].map((l) => <span>{l}</span>)}</div>
+      <div class="hero__grid">
+        <div class="hero__text">
+          <div class="label"><b>●</b> Хабаровск · резка на ЧПУ</div>
+          <h1>{nb(h.title)}</h1>
+          <div class="dimline" aria-label="Толщина реза до 50 миллиметров">
+            <span class="dimline__bar" aria-hidden="true"></span>
+            <span class="dimline__txt mono">сталь до 50 мм</span>
+            <span class="dimline__bar" aria-hidden="true"></span>
+          </div>
+          <p class="hero__lead">{nb(h.lead)}</p>
+          <div class="hero__btns">
+            <a class="btn btn--laser" href="#lead">Загрузить чертёж <span class="btn__arrow">→</span></a>
+            <a class="btn btn--line" href={phoneHref}>{site.contacts.phone}</a>
+          </div>
+        </div>
+        <div class="hero__dwg">
+          <Drawing />
+          <dl class="stamp">
+            <div class="stamp__title"><span>{site.brand.name}</span><span class="mono">М 1:1</span></div>
+            {h.stamp.map(([k, v]) => <div class="stamp__cell"><dt class="mono">{k}</dt><dd>{v}</dd></div>)}
+          </dl>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 2. Материалы и толщины -->
+<section class="sec" id="materials">
+  <div class="wrap">
+    <div class="sec__head">
+      <div><div class="label"><b>01</b> Материалы</div><h2>Что режем и какой толщины</h2></div>
+      <p>Предельная толщина зависит от марки и формы детали — точно скажем по чертежу.</p>
+    </div>
+    <div class="mat">
+      <div class="mat__scale mono" aria-hidden="true">
+        <span></span><span class="mat__ticks">{ticks.map((t) => <i>{t}</i>)}</span><span>мм</span>
+      </div>
+      {m.rows.map(([name, grade, t]) => (
+        <div class="mat__row">
+          <div class="mat__name"><b>{name}</b>{grade && <small class="mono">{grade}</small>}</div>
+          <div class:list={['mat__track', { 'mat__track--na': !t }]}>
+            {t && <span class="mat__fill" style={`width:${(t / m.max) * 100}%`}></span>}
+          </div>
+          <div class="mat__val mono">{t ? `до ${t} мм` : 'по запросу'}</div>
+        </div>
+      ))}
+    </div>
+    <div class="parts">
+      <h3>Что изготовим</h3>
+      <ul>{m.products.map((p) => <li><span class="mono">+</span>{p}</li>)}</ul>
+    </div>
+  </div>
+</section>
+
+<!-- 3. Заявка: «синька» -->
+<section class="sec order" id="lead">
+  <div class="wrap order__grid">
+    <div class="order__text">
+      <div class="label"><b>02</b> Расчёт</div>
+      <h2>Пришлите чертёж — посчитаем за 24 часа</h2>
+      <p>Ответим ценой, сроком и советом по материалу. Без чертежа тоже можно: сфотографируйте эскиз с размерами.</p>
+      <ul class="order__list mono">
+        <li>марка и толщина металла</li>
+        <li>количество деталей</li>
+        <li>нужна ли гибка, сварка, покраска</li>
+      </ul>
+      <p class="order__call">Удобнее голосом? <a href={phoneHref}>{site.contacts.phone}</a></p>
+    </div>
+    <LeadForm />
+  </div>
+</section>
+
+<!-- 4. Порядок работы: линия реза -->
+<section class="sec" id="steps">
+  <div class="wrap">
+    <div class="sec__head">
+      <div><div class="label"><b>03</b> Порядок работы</div><h2>От файла до готовых деталей</h2></div>
+    </div>
+    <ol class="steps">
+      {site.steps.map(([t, s], i) => (
+        <li><span class="steps__n mono">{String(i + 1).padStart(2, '0')}</span><h3>{t}</h3><p>{s}</p></li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<!-- 5. Преимущества: таблица-спецификация -->
+<section class="sec sec--tight">
+  <div class="wrap">
+    <div class="sec__head">
+      <div><div class="label"><b>04</b> Почему мы</div><h2>Режем сами — без посредников</h2></div>
+    </div>
+    <div class="spec">
+      {site.advantages.map(([t, s], i) => (
+        <div class="spec__cell"><span class="spec__pos mono">поз. {i + 1}</span><h3>{t}</h3><p>{s}</p></div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<!-- 6. Справка (SEO-текст) -->
+<section class="sec sec--tight">
+  <div class="wrap note">
+    <div class="note__side"><div class="label"><b>05</b> Справка</div></div>
+    <div class="note__body"><Text /></div>
+  </div>
+</section>
+
+<!-- 7. Вопросы -->
+<section class="sec faq" id="faq">
+  <div class="wrap">
+    <div class="sec__head">
+      <div><div class="label"><b>06</b> Вопросы</div><h2>Частые вопросы</h2></div>
+    </div>
+    <div class="faq__list">
+      {site.faq.map(([q, a], i) => (
+        <details><summary><span class="mono">{String(i + 1).padStart(2, '0')}</span>{q}</summary><p>{a}</p></details>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  /* ── 1. Лист ── */
+  .hero { padding: 32px 0 72px; }
+  .sheet { position: relative; background: var(--sheet); border: 1px solid var(--ink); padding: 56px 48px 48px 64px; }
+  .sheet::before { content: ''; position: absolute; inset: 8px; border: 1px solid var(--rule); pointer-events: none; }
+  .sheet__ruler { position: absolute; top: 14px; left: 64px; right: 48px; display: flex; justify-content: space-between; font: 500 11px/1 var(--f-mono); color: var(--muted); }
+  .hero__grid { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 56px; align-items: center; }
+  .hero h1 { font-size: clamp(32px, 4.4vw, 58px); }
+  .dimline { display: flex; align-items: center; gap: 12px; margin: 22px 0 26px; max-width: 520px; color: var(--laser); }
+  .dimline__bar { flex: 1; height: 1.5px; background: currentColor; position: relative; }
+  .dimline__bar:first-child::before, .dimline__bar:last-child::after { content: ''; position: absolute; top: -7px; width: 1.5px; height: 16px; background: currentColor; }
+  .dimline__bar:first-child::before { left: 0; }
+  .dimline__bar:last-child::after { right: 0; }
+  .dimline__txt { font-size: 15px; font-weight: 500; white-space: nowrap; }
+  .hero__lead { font-size: 19px; color: #33465c; max-width: 540px; }
+  .hero__btns { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+  .hero__dwg { display: grid; gap: 20px; }
+
+  .stamp { margin: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border: 1px solid var(--ink); }
+  .stamp__title { grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; border-bottom: 1px solid var(--ink); font: 700 14px/1 var(--f-head); text-transform: uppercase; letter-spacing: 0.04em; }
+  .stamp__title .mono { font: 500 12px/1 var(--f-mono); }
+  .stamp__cell { padding: 10px 14px; border-bottom: 1px solid var(--rule-strong); }
+  .stamp__cell:nth-child(even) { border-right: 1px solid var(--rule-strong); }
+  .stamp__cell:nth-last-child(-n + 2) { border-bottom: 0; }
+  .stamp dt { font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
+  .stamp dd { margin: 2px 0 0; font-weight: 600; }
+
+  /* ── 2. Материалы ── */
+  .mat { border-top: 1px solid var(--ink); }
+  .mat__scale, .mat__row { display: grid; grid-template-columns: minmax(0, 300px) minmax(0, 1fr) 130px; gap: 24px; align-items: center; }
+  .mat__scale { padding: 10px 0; font-size: 11px; color: var(--muted); border-bottom: 1px solid var(--rule); }
+  .mat__ticks { display: flex; justify-content: space-between; }
+  .mat__ticks i { font-style: normal; }
+  .mat__row { padding: 18px 0; border-bottom: 1px solid var(--rule); }
+  .mat__name { display: grid; gap: 2px; }
+  .mat__name small { font-size: 12px; color: var(--muted); }
+  .mat__track { height: 10px; background: repeating-linear-gradient(90deg, var(--rule) 0 1px, transparent 1px 10%); border: 1px solid var(--rule-strong); position: relative; }
+  .mat__track--na { border-style: dashed; background: none; }
+  .mat__fill { position: absolute; inset: -1px auto -1px -1px; background: var(--laser); }
+  .mat__val { text-align: right; font-size: 15px; font-weight: 500; }
+  .mat__track--na + .mat__val { color: var(--muted); }
+  .parts { margin-top: 48px; display: grid; grid-template-columns: minmax(0, 300px) minmax(0, 1fr); gap: 24px; }
+  .parts ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+  .parts li { display: inline-flex; gap: 8px; border: 1px solid var(--ink); border-radius: var(--r); padding: 8px 14px; font-size: 15px; font-weight: 600; background: var(--sheet); }
+  .parts li .mono { color: var(--laser); }
+
+  /* ── 3. Заявка (синька) ── */
+  .order { background: var(--ink); color: var(--on-ink);
+    background-image: linear-gradient(var(--rule-on-ink) 1px, transparent 1px), linear-gradient(90deg, var(--rule-on-ink) 1px, transparent 1px);
+    background-size: 32px 32px; }
+  .order .label { color: var(--on-ink-muted); }
+  .order__grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 520px); gap: 64px; align-items: center; }
+  .order__text > p { color: var(--on-ink-muted); margin-top: 20px; max-width: 480px; }
+  .order__list { list-style: none; margin: 28px 0 0; padding: 0; display: grid; gap: 10px; font-size: 15px; }
+  .order__list li::before { content: '— '; color: var(--laser); }
+  .order__call { margin-top: 28px !important; }
+  .order__call a { color: var(--on-ink); font-weight: 600; text-decoration-color: var(--laser); text-underline-offset: 4px; white-space: nowrap; }
+
+  /* ── 4. Порядок работы ── */
+  .steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); position: relative; }
+  .steps::before { content: ''; position: absolute; top: 15px; left: 0; right: 0; border-top: 1.5px dashed var(--laser); }
+  .steps li { position: relative; padding: 0 24px 0 0; display: grid; gap: 10px; align-content: start; }
+  .steps__n { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; background: var(--paper); border: 1.5px solid var(--ink); font-size: 13px; font-weight: 500; position: relative; margin-bottom: 8px; }
+  .steps li:first-child .steps__n { background: var(--laser); border-color: var(--laser); }
+  .steps p { color: var(--muted); font-size: 16px; }
+
+  /* ── 5. Спецификация ── */
+  .sec--tight { padding-top: 24px; }
+  .spec { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border-top: 1px solid var(--ink); border-left: 1px solid var(--ink); }
+  .spec__cell { padding: 28px; border-right: 1px solid var(--ink); border-bottom: 1px solid var(--ink); display: grid; gap: 10px; align-content: start; background: var(--sheet); }
+  .spec__pos { font-size: 12px; color: var(--laser); text-transform: uppercase; letter-spacing: 0.06em; }
+  .spec__cell h3 { font-size: 20px; }
+  .spec__cell p { color: var(--muted); }
+
+  /* ── 6. Справка ── */
+  .note { display: grid; grid-template-columns: minmax(0, 300px) minmax(0, 720px); gap: 24px; }
+  .note__side .label { position: sticky; top: 96px; }
+  .note__body :global(h2) { font-size: clamp(22px, 2.4vw, 28px); margin: 40px 0 14px; }
+  .note__body :global(h2:first-child) { margin-top: 0; }
+  .note__body :global(p), .note__body :global(li) { color: #33465c; }
+  .note__body :global(p + p) { margin-top: 14px; }
+  .note__body :global(ul) { margin: 14px 0; padding-left: 20px; display: grid; gap: 8px; }
+  .note__body :global(li::marker) { color: var(--laser); }
+
+  /* ── 7. Вопросы ── */
+  .faq__list { border-top: 1px solid var(--ink); }
+  .faq details { border-bottom: 1px solid var(--rule-strong); }
+  .faq summary { list-style: none; cursor: pointer; display: grid; grid-template-columns: 48px minmax(0, 1fr) 24px; gap: 12px; align-items: baseline; padding: 22px 0; font-weight: 600; font-size: 18px; }
+  .faq summary::-webkit-details-marker { display: none; }
+  .faq summary .mono { font-size: 13px; color: var(--laser); font-weight: 500; }
+  .faq summary::after { content: '+'; font: 400 22px/1 var(--f-mono); text-align: right; }
+  .faq details[open] summary::after { content: '−'; }
+  .faq details p { padding: 0 36px 24px 60px; color: var(--muted); max-width: 820px; }
+
+  /* ── адаптив ── */
+  @media (max-width: 980px) {
+    .hero__grid, .order__grid { grid-template-columns: minmax(0, 1fr); gap: 40px; }
+    .hero__dwg { max-width: 520px; }
+    .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 36px; }
+    .steps::before { display: none; }
+  }
+  @media (max-width: 760px) {
+    .mat__scale { display: none; }
+    .mat__row { grid-template-columns: minmax(0, 1fr) auto; gap: 10px 16px; }
+    .mat__track { grid-column: 1 / -1; grid-row: 2; }
+    .parts, .note { grid-template-columns: minmax(0, 1fr); }
+    .note__side .label { position: static; }
+    .spec { grid-template-columns: minmax(0, 1fr); }
+  }
+  @media (max-width: 640px) {
+    .hero { padding: 16px 0 48px; }
+    .sheet { padding: 40px 18px 24px; }
+    .sheet__ruler { left: 18px; right: 18px; }
+    .hero__lead { font-size: 17px; }
+    .hero__btns .btn { flex: 1 1 100%; }
+    .steps { grid-template-columns: minmax(0, 1fr); row-gap: 24px; }
+    .spec__cell { padding: 22px 18px; }
+    .faq summary { grid-template-columns: 32px minmax(0, 1fr) 20px; font-size: 16px; padding: 18px 0; }
+    .faq details p { padding: 0 0 20px 44px; }
+  }
+</style>
