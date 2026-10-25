@@ -4,3 +4,4 @@ dist/
 .env
 pocketbase/pb_data/
 deploy/nginx/sites.conf
+tokens.env
