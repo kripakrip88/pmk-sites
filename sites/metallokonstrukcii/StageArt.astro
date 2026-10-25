@@ -1,0 +1,81 @@
+---
+// Иллюстрация этапа: тонкие линии на светлой сетке, как лист из рабочей папки.
+interface Props { kind: string; label: string }
+const { kind, label } = Astro.props;
+---
+<figure class="art" aria-hidden="true">
+  <svg viewBox="0 0 480 200" width="480" height="200" preserveAspectRatio="xMidYMid meet">
+    <g fill="none" stroke="#0a0a0a" stroke-width="2" stroke-linejoin="round" stroke-linecap="round">
+      {kind === 'drawing' && (
+        <>
+          <rect x="60" y="24" width="360" height="152" rx="4" stroke="#a1a1aa" />
+          <path d="M60 148h120v28" stroke="#a1a1aa" />
+          <path d="M116 56h72v10h-31v60h31v10h-72v-10h31V66h-31z" />
+          <path d="M104 56v80 M100 56h8 M100 136h8" stroke="#71717a" stroke-width="1.4" />
+          <path d="M116 150h72 M116 146v8 M188 146v8" stroke="#71717a" stroke-width="1.4" />
+          <path d="M240 60h150 M240 84h120 M240 108h140 M240 132h96" stroke="#d4d4d8" stroke-width="6" />
+          <path d="M72 160h60 M72 168h40" stroke="#d4d4d8" stroke-width="3" />
+        </>
+      )}
+      {kind === 'cutting' && (
+        <>
+          <rect x="40" y="40" width="300" height="130" rx="3" stroke="#a1a1aa" />
+          <path d="M60 60h70v50H60z M150 60l60 0 0 60z M230 60h90v30h-90z M60 130h120v24H60z" />
+          <circle cx="275" cy="135" r="20" />
+          <circle cx="275" cy="135" r="7" />
+          <path d="M210 60l0 60" stroke="#ea580c" stroke-width="3" />
+          <path d="M398 36v54 M386 90h24l-6 16h-12z" />
+          <path d="M398 106v20" stroke="#ea580c" stroke-width="3" stroke-dasharray="4 4" />
+          <path d="M360 160h100 M360 172h100" stroke="#d4d4d8" stroke-width="6" />
+        </>
+      )}
+      {kind === 'welding' && (
+        <>
+          <path d="M70 140h340v18H70z" />
+          <path d="M200 40h18v100h-18z" />
+          <path d="M218 128l-6 6 6 6 M200 128l6 6-6 6" stroke="#ea580c" />
+          <path d="M218 122q6 3 0 6q6 3 0 6q6 3 0 6" stroke="#ea580c" stroke-width="2.4" />
+          <path d="M300 40l-62 62" />
+          <path d="M296 36l12 12" stroke-width="4" />
+          <path d="M240 104l10-4 M236 98l4-10 M246 110l12 2 M232 108l-10 6" stroke="#f59e0b" />
+          <path d="M70 176h340" stroke="#d4d4d8" stroke-width="3" />
+        </>
+      )}
+      {kind === 'painting' && (
+        <>
+          <path d="M60 80h360v40H60z" />
+          <path d="M60 80h200v40H60z" fill="#3f3f46" stroke="none" />
+          <path d="M60 80h360v40H60z" />
+          <path d="M330 40h50l10 14h-60z M350 54v26 M346 80h8" />
+          <path d="M318 47h-40" stroke="#a1a1aa" stroke-dasharray="3 5" />
+          <path d="M300 60l-34 30 M296 70l-26 34 M306 66l-14 44" stroke="#a1a1aa" stroke-dasharray="2 5" />
+          <rect x="70" y="148" width="22" height="22" rx="3" fill="#3f3f46" stroke="none" />
+          <rect x="98" y="148" width="22" height="22" rx="3" fill="#71717a" stroke="none" />
+          <rect x="126" y="148" width="22" height="22" rx="3" fill="#d4d4d8" stroke="none" />
+          <path d="M160 160h120" stroke="#d4d4d8" stroke-width="6" />
+        </>
+      )}
+      {kind === 'truck' && (
+        <>
+          <path d="M40 140h290v14H40z" />
+          <path d="M330 100h60l30 30v24h-90z M346 108h36l18 20h-54z" />
+          <circle cx="90" cy="164" r="13" fill="#fff" />
+          <circle cx="140" cy="164" r="13" fill="#fff" />
+          <circle cx="370" cy="164" r="13" fill="#fff" />
+          <path d="M56 120h250v20H56z M70 100h220v20H70z M86 80h180v20H86z" />
+          <path d="M60 120v20 M302 120v20" stroke="#ea580c" stroke-width="3" />
+          <path d="M100 86h24 M150 106h24 M200 126h24" stroke="#a1a1aa" stroke-width="1.4" />
+        </>
+      )}
+    </g>
+  </svg>
+  <figcaption class="mono">{label}</figcaption>
+</figure>
+
+<style>
+  .art { margin: 0; position: relative; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background:
+    linear-gradient(#f4f4f5 1px, transparent 1px) 0 0 / 24px 24px,
+    linear-gradient(90deg, #f4f4f5 1px, transparent 1px) 0 0 / 24px 24px, #fafafa; }
+  .art svg { width: 100%; height: auto; }
+  .art figcaption { font-size: 12px; color: var(--muted); background: #fff; border-top: 1px solid var(--line); padding: 7px 12px; }
+</style>

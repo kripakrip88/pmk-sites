@@ -1,0 +1,48 @@
+---
+// Полная форма «Металлоконструкций ДВ». Логика отправки общая — src/lib/lead-form.js (контракт разметки там).
+---
+<form class="lf" data-lead-form novalidate>
+  <label class="lf__drop">
+    <input name="files" type="file" multiple accept=".pdf,.dwg,.dxf,.jpg,.jpeg,.png,.heic,.xls,.xlsx,.zip,.rar,.7z" />
+    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M21 12.5l-8.5 8.5a6 6 0 0 1-8.5-8.5l9-9a4 4 0 0 1 5.7 5.7l-9 9a2 2 0 0 1-2.8-2.8l8.3-8.3" /></svg>
+    <span><b data-lead-files>Приложить проект, чертежи или фото</b><small>PDF, DWG, DXF, JPG, Excel — до 20 МБ</small></span>
+  </label>
+  <div class="lf__row">
+    <input name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="Телефон *" aria-label="Телефон" required />
+    <input name="name" type="text" autocomplete="name" maxlength="200" placeholder="Имя" aria-label="Имя" />
+  </div>
+  <textarea name="comment" rows="3" maxlength="5000" placeholder="Что нужно сделать: например, навес 6×9 м над площадкой, покраска RAL 7016" aria-label="Что нужно сделать"></textarea>
+  <label class="lf__hp" aria-hidden="true">Сайт <input name="website" tabindex="-1" autocomplete="off" /></label>
+  <label class="lf__consent"><input name="consent" type="checkbox" value="true" required /> <span>Согласен на <a href="/politika/" target="_blank">обработку персональных данных</a></span></label>
+  <button class="btn btn--light lf__btn" type="submit">Отправить заявку</button>
+  <p class="lf__status" data-lead-status role="status" aria-live="polite"></p>
+</form>
+
+<style>
+  .lf { display: grid; gap: 10px; }
+  .lf__drop { position: relative; display: flex; align-items: center; gap: 12px; padding: 14px; border: 1px dashed #52525b; border-radius: var(--r); cursor: pointer; color: #e4e4e7; }
+  .lf__drop:hover, .lf__drop:focus-within { border-color: #fff; }
+  .lf__drop input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+  .lf__drop span { display: grid; gap: 2px; }
+  .lf__drop b { font-weight: 500; color: #fff; }
+  .lf__drop small { font-size: 13px; color: #a1a1aa; }
+  .lf__row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 10px; }
+  .lf input[type='tel'], .lf input[type='text'], .lf textarea {
+    font: 400 15px/1.4 var(--f-text); color: #fff; background: #18181b; width: 100%;
+    border: 1px solid #3f3f46; border-radius: 8px; padding: 12px 14px; resize: vertical;
+  }
+  .lf ::placeholder { color: #71717a; }
+  .lf input:focus, .lf textarea:focus { outline: none; border-color: #fff; }
+  .lf__hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+  .lf__consent { display: flex; align-items: center; gap: 8px; font-size: 13px; color: #a1a1aa; }
+  .lf__consent input { width: 16px; height: 16px; margin: 0; accent-color: #fff; flex: none; }
+  .lf__consent a { color: #fff; text-underline-offset: 2px; }
+  .lf__btn { width: 100%; padding: 14px; }
+  .lf__btn:disabled { opacity: 0.6; cursor: wait; }
+  .lf__status { font-size: 14px; font-weight: 500; }
+  .lf__status:empty { display: none; }
+  .lf__status[data-state='error'] { color: #fca5a5; }
+  .lf__status[data-state='ok'] { color: #86efac; }
+  .lf__status[data-state='busy'] { color: #a1a1aa; }
+  @media (max-width: 480px) { .lf__row { grid-template-columns: minmax(0, 1fr); } }
+</style>

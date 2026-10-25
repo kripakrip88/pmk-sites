@@ -1,0 +1,79 @@
+---
+import './styles.css';
+import Head from '../../src/components/Head.astro';
+import Logo from './Logo.astro';
+import site, { phoneHref } from '../../src/lib/site.js';
+
+interface Props { title: string; description: string; noindex?: boolean; schema?: object[] }
+const props = Astro.props;
+const home = Astro.url.pathname === '/';
+const to = (hash: string) => (home ? hash : '/' + hash);
+const c = site.contacts;
+const year = new Date().getFullYear();
+---
+<!doctype html>
+<html lang="ru">
+  <head>
+    <Head {...props} />
+    <meta name="theme-color" content="#ffffff" />
+  </head>
+  <body>
+    <header class="hdr">
+      <div class="wrap hdr__in">
+        <a class="hdr__logo" href="/" aria-label={`${site.brand.name} — на главную`}><Logo /></a>
+        <nav class="hdr__nav" aria-label="Разделы">
+          <a href={to('#stages')}>Этапы</a>
+          <a href={to('#faq')}>Вопросы</a>
+          <a href={to('#lead')}>Заявка</a>
+        </nav>
+        <a class="hdr__phone mono" href={phoneHref} aria-label={`Позвонить: ${c.phone}`}>
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 3h4l2 5-2.5 1.5a11 11 0 0 0 6 6L16 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 5a2 2 0 0 1 2-2"/></svg>
+          <span>{c.phone}</span>
+        </a>
+      </div>
+    </header>
+
+    <main><slot /></main>
+
+    <footer class="ftr">
+      <div class="wrap ftr__in">
+        <Logo />
+        <nav class="ftr__nav" aria-label="Разделы">
+          <a href={to('#stages')}>Этапы</a>
+          <a href={to('#faq')}>Вопросы</a>
+          <a href="/politika/">Политика ПДн</a>
+        </nav>
+        <div class="ftr__c">
+          <a class="mono" href={phoneHref}>{c.phone}</a>
+          <span>{c.hours} · {c.address}</span>
+        </div>
+      </div>
+      <div class="wrap ftr__bottom">© {year} {site.brand.name} · {site.service} {site.cityIn} · Не является публичной офертой</div>
+    </footer>
+  </body>
+</html>
+
+<style>
+  .hdr { position: sticky; top: 0; z-index: 40; background: rgba(255, 255, 255, 0.92); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
+  .hdr__in { display: flex; align-items: center; gap: 24px; height: 64px; }
+  .hdr__logo { text-decoration: none; margin-right: auto; }
+  .hdr__nav { display: flex; gap: 28px; position: absolute; left: 50%; transform: translateX(-50%); }
+  .hdr__nav a { color: #52525b; text-decoration: none; font-size: 15px; }
+  .hdr__nav a:hover { color: var(--fg); }
+  .hdr__phone { display: flex; align-items: center; gap: 8px; text-decoration: none; font-size: 14px; font-weight: 500; padding: 8px 12px; border-radius: 8px; border: 1px solid var(--line); white-space: nowrap; }
+  .hdr__phone:hover { background: var(--soft); }
+  .hdr__in { position: relative; }
+  @media (max-width: 900px) { .hdr__nav { display: none; } }
+  @media (max-width: 480px) { .hdr__phone span { display: none; } .hdr__phone { padding: 10px; } }
+
+  .ftr { border-top: 1px solid var(--line); padding: 32px 0 24px; font-size: 14px; color: var(--muted); }
+  .ftr__in { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 20px; }
+  .ftr__nav { display: flex; gap: 24px; }
+  .ftr a { text-decoration: none; }
+  .ftr a:hover { color: var(--fg); }
+  .ftr__c { display: grid; gap: 2px; text-align: right; }
+  .ftr__c a { color: var(--fg); font-weight: 500; }
+  .ftr__bottom { position: relative; margin-top: 24px; padding-top: 20px; text-align: center; font-size: 13px; }
+  .ftr__bottom::before { content: ''; position: absolute; top: 0; left: var(--pad); right: var(--pad); height: 1px; background: var(--line); }
+  @media (max-width: 720px) { .ftr__in { flex-direction: column; align-items: flex-start; } .ftr__c { text-align: left; } }
+</style>
