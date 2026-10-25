@@ -1,0 +1,69 @@
+---
+// Форма «Опоры». Логика отправки общая — src/lib/lead-form.js (контракт разметки описан там).
+---
+<form class="lf" data-lead-form novalidate>
+  <label class="lf__drop">
+    <input name="files" type="file" multiple accept=".pdf,.xls,.xlsx,.doc,.docx,.dwg,.dxf,.jpg,.jpeg,.png,.heic,.zip,.rar,.7z" />
+    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M14 3H6v18h12V7z M14 3v4h4 M9 12h6 M9 15.5h6 M9 8.5h2" /></svg>
+    <span><b data-lead-files>Прикрепите спецификацию</b><small>Excel, PDF, фото листа проекта — до 20 МБ</small></span>
+  </label>
+
+  <div class="lf__row">
+    <label class="lf__f">
+      <span>Телефон *</span>
+      <input name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+7" required />
+    </label>
+    <label class="lf__f">
+      <span>Имя</span>
+      <input name="name" type="text" autocomplete="name" maxlength="200" />
+    </label>
+  </div>
+  <label class="lf__f">
+    <span>Что нужно</span>
+    <textarea name="comment" rows="3" maxlength="5000" placeholder="Например: болт 1.1 М24×800 09Г2С — 32 шт"></textarea>
+  </label>
+  <label class="lf__hp" aria-hidden="true">Сайт <input name="website" tabindex="-1" autocomplete="off" /></label>
+
+  <label class="lf__consent">
+    <input name="consent" type="checkbox" value="true" required />
+    <span>Согласен на <a href="/politika/" target="_blank">обработку персональных данных</a></span>
+  </label>
+  <div class="lf__foot">
+    <button class="btn btn--zinc btn--big" type="submit">Отправить на расчёт</button>
+    <p class="lf__status" data-lead-status role="status" aria-live="polite"></p>
+  </div>
+</form>
+
+<style>
+  .lf { display: grid; gap: 18px; }
+  .lf__drop { position: relative; display: flex; align-items: center; gap: 14px; padding: 18px; border: 1.5px dashed var(--zinc); border-radius: var(--r); background: var(--zinc-tint); cursor: pointer; transition: background 0.15s; }
+  .lf__drop:hover, .lf__drop:focus-within { background: #d9ede9; }
+  .lf__drop input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+  .lf__drop svg { color: var(--zinc); flex: none; }
+  .lf__drop span { display: grid; gap: 2px; }
+  .lf__drop b { font-weight: 600; }
+  .lf__drop small { font-size: 13px; color: var(--muted); }
+  .lf__row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; }
+  .lf__f { display: grid; gap: 6px; }
+  .lf__f span { font-size: 13px; font-weight: 500; color: var(--muted); }
+  .lf__f input, .lf__f textarea {
+    font: 400 16px/1.4 var(--f-text); color: var(--text); background: #fff; width: 100%;
+    border: 1px solid var(--rule-strong); border-radius: 6px; padding: 11px 12px; resize: vertical;
+  }
+  .lf__f input:focus, .lf__f textarea:focus { outline: none; border-color: var(--zinc); box-shadow: 0 0 0 3px rgba(11, 122, 107, 0.15); }
+  .lf__hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+  .lf__consent { display: flex; gap: 10px; align-items: flex-start; font-size: 13px; color: var(--muted); }
+  .lf__consent input { width: 18px; height: 18px; margin: 1px 0 0; accent-color: var(--zinc); flex: none; }
+  .lf__consent a { color: var(--text); text-underline-offset: 2px; }
+  .lf__foot { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; }
+  .lf button:disabled { opacity: 0.6; cursor: wait; }
+  .lf__status { font-size: 14px; font-weight: 600; }
+  .lf__status:empty { display: none; }
+  .lf__status[data-state='error'] { color: #b42318; }
+  .lf__status[data-state='ok'] { color: var(--zinc-dark); }
+  .lf__status[data-state='busy'] { color: var(--muted); }
+  @media (max-width: 560px) {
+    .lf__row { grid-template-columns: minmax(0, 1fr); }
+    .lf__foot .btn { width: 100%; }
+  }
+</style>

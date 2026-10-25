@@ -1,0 +1,172 @@
+---
+// Посадочная «Опоры» — паспорт изделия в одну колонку (по мотивам dotcv).
+import BoltEnd from './BoltEnd.astro';
+import BoltType from './BoltType.astro';
+import LeadForm from './LeadForm.astro';
+import { Content as Text } from './text.md';
+import site, { phoneHref } from '../../src/lib/site.js';
+
+const c = site.contacts;
+const w = site.weights;
+const kg = (v: number | null) => (v == null ? '—' : v.toFixed(2).replace('.', ','));
+---
+<section class="hero">
+  <BoltEnd />
+  <div class="hero__id">
+    <h1>Фундаментные болты {site.cityIn}</h1>
+    <p class="hero__sub">{site.hero.subtitle}</p>
+    <ul class="hero__contacts">
+      <li><a href={phoneHref}><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 3h4l2 5-2.5 1.5a11 11 0 0 0 6 6L16 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 5a2 2 0 0 1 2-2"/></svg>{c.phone}</a></li>
+      <li><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 21s7-6.2 7-12a7 7 0 0 0-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="9" r="2.5"/></svg>{c.address}</li>
+      <li><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>{c.hours}</li>
+    </ul>
+    <div class="tags">
+      {site.hero.facts.map(([k, v]) => <span class="tag tag--zinc"><span class="hero__k">{k}</span> {v}</span>)}
+    </div>
+  </div>
+  <p class="hero__lead">{site.hero.lead}</p>
+</section>
+
+<section class="sec" id="types">
+  <h2 class="sec__h">Типы болтов</h2>
+  <div class="types">
+    {site.types.map((t) => (
+      <article class="ty">
+        <BoltType code={t.code} />
+        <div class="ty__body">
+          <div class="ty__head">
+            <h3>Тип {t.code} · {t.name}</h3>
+            <span class="ty__range mono">{t.range}</span>
+          </div>
+          <p class="ty__kit">{t.kit}</p>
+          <p class="ty__text">{t.text}</p>
+          <div class="tags">{t.tags.map((g) => <span class="tag">{g}</span>)}</div>
+        </div>
+      </article>
+    ))}
+  </div>
+</section>
+
+<section class="sec" id="kit">
+  <h2 class="sec__h">Что входит в поставку</h2>
+  <dl class="kit">
+    {site.kit.map(([k, items]) => (
+      <div class="kit__row">
+        <dt>{k}</dt>
+        <dd class="tags">{items.map((i) => <span class="tag">{i}</span>)}</dd>
+      </div>
+    ))}
+  </dl>
+</section>
+
+<section class="sec" id="weights">
+  <h2 class="sec__h">{w.title}</h2>
+  <p class="sec__lead">{w.note}</p>
+  <div class="wt" role="region" aria-label={w.title} tabindex="0">
+    <table>
+      <thead>
+        <tr><th scope="col">Длина, мм</th>{w.diameters.map((d) => <th scope="col">М{d}</th>)}</tr>
+      </thead>
+      <tbody>
+        {w.rows.map(([len, vals]) => (
+          <tr><th scope="row">{len}</th>{vals.map((v) => <td class:list={{ wt__none: v == null }}>{kg(v)}</td>)}</tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="sec" id="order">
+  <h2 class="sec__h">Как заказать</h2>
+  <ol class="steps">
+    {site.steps.map(([h, p], i) => (
+      <li class="st">
+        <div class="st__head"><h3>{h}</h3><span class="mono">шаг {i + 1}</span></div>
+        <p>{p}</p>
+      </li>
+    ))}
+  </ol>
+</section>
+
+<section class="sec" id="lead">
+  <h2 class="sec__h">Заявка на расчёт</h2>
+  <p class="sec__lead">Пришлите спецификацию или опишите, что нужно, — перезвоним и уточним детали.</p>
+  <LeadForm />
+</section>
+
+<section class="sec" id="faq">
+  <h2 class="sec__h">Вопросы</h2>
+  <div class="faq">
+    {site.faq.map(([q, a]) => (
+      <details>
+        <summary>{q}</summary>
+        <p>{a}</p>
+      </details>
+    ))}
+  </div>
+</section>
+
+<section class="sec" id="about">
+  <h2 class="sec__h">О фундаментных болтах</h2>
+  <div class="text"><Text /></div>
+</section>
+
+<style>
+  .hero { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 24px 32px; align-items: center; padding: 16px 0 40px; }
+  .hero h1 { font-size: clamp(26px, 4vw, 34px); font-weight: 700; letter-spacing: -0.02em; }
+  .hero__sub { color: var(--zinc); font-size: 18px; font-weight: 500; margin-top: 6px; }
+  .hero__contacts { list-style: none; margin: 14px 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px 20px; font-size: 14px; color: var(--muted); }
+  .hero__contacts li, .hero__contacts a { display: inline-flex; align-items: center; gap: 6px; text-decoration: none; }
+  .hero__contacts a:hover { color: var(--zinc-dark); }
+  .hero__k { opacity: 0.7; }
+  .hero__lead { grid-column: 1 / -1; color: #3c444c; font-size: 17px; max-width: 720px; }
+  @media (max-width: 720px) {
+    .hero { grid-template-columns: minmax(0, 1fr); justify-items: start; padding-top: 4px; }
+  }
+
+  .types { display: grid; gap: 32px; }
+  .ty { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 20px; }
+  .ty__head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 4px 16px; }
+  .ty__head h3 { font-size: 18px; font-weight: 600; }
+  .ty__range { font-size: 14px; color: var(--muted); white-space: nowrap; }
+  .ty__kit { color: var(--zinc); font-weight: 500; font-size: 15px; margin-top: 2px; }
+  .ty__text { margin: 8px 0 12px; color: #3c444c; }
+
+  .kit { margin: 0; display: grid; gap: 14px; }
+  .kit__row { display: grid; grid-template-columns: 140px minmax(0, 1fr); gap: 8px 20px; align-items: baseline; }
+  .kit dt { font-weight: 600; }
+  .kit dd { margin: 0; }
+  @media (max-width: 560px) { .kit__row { grid-template-columns: minmax(0, 1fr); } }
+
+  .wt { overflow-x: auto; border: 1px solid var(--rule); border-radius: var(--r); }
+  .wt table { width: 100%; border-collapse: collapse; font: 400 14px/1.2 var(--f-mono); font-variant-numeric: tabular-nums; }
+  .wt th, .wt td { padding: 10px 12px; text-align: right; white-space: nowrap; border-bottom: 1px solid var(--rule); }
+  .wt thead th { background: #f6f7f8; color: var(--muted); font-weight: 500; }
+  .wt tbody tr:last-child > * { border-bottom: 0; }
+  .wt tbody th { text-align: left; font-weight: 500; }
+  .wt th:first-child { text-align: left; position: sticky; left: 0; background: #fff; }
+  .wt thead th:first-child { background: #f6f7f8; }
+  .wt tbody tr:hover td, .wt tbody tr:hover th { background: var(--zinc-tint); }
+  .wt__none { color: var(--rule-strong); }
+
+  .steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 20px; }
+  .st__head { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; }
+  .st__head h3 { font-size: 17px; font-weight: 600; }
+  .st__head span { font-size: 13px; color: var(--muted); }
+  .st p { color: #3c444c; margin-top: 2px; }
+
+  .faq details { border-bottom: 1px solid var(--rule); }
+  .faq details:first-child { border-top: 1px solid var(--rule); }
+  .faq summary { cursor: pointer; list-style: none; padding: 14px 32px 14px 0; font-weight: 600; position: relative; }
+  .faq summary::-webkit-details-marker { display: none; }
+  .faq summary::after { content: '+'; position: absolute; right: 4px; top: 12px; font: 400 20px/1 var(--f-mono); color: var(--zinc); }
+  .faq details[open] summary::after { content: '−'; }
+  .faq details p { padding: 0 0 16px; color: #3c444c; }
+
+  .text { color: #3c444c; max-width: 720px; }
+  .text :global(h2) { font-size: 18px; color: var(--text); margin: 24px 0 8px; }
+  .text :global(h2:first-child) { margin-top: 0; }
+  .text :global(p + p), .text :global(ul) { margin-top: 10px; }
+  .text :global(ul) { padding-left: 20px; }
+  .text :global(li + li) { margin-top: 4px; }
+</style>

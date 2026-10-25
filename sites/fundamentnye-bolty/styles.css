@@ -1,0 +1,79 @@
+/* «Опора» — фундаментные-болты-хабаровск.рф
+   Концепция: паспорт изделия (основа — тема dotcv, MIT). Белый лист в одну колонку на бетонном фоне,
+   разделы с акцентным заголовком, записи «тип — диапазон диаметров», метки-теги. Скругление 8px. */
+@import '@fontsource/onest/cyrillic-400.css';
+@import '@fontsource/onest/latin-400.css';
+@import '@fontsource/onest/cyrillic-500.css';
+@import '@fontsource/onest/latin-500.css';
+@import '@fontsource/onest/cyrillic-600.css';
+@import '@fontsource/onest/latin-600.css';
+@import '@fontsource/onest/cyrillic-700.css';
+@import '@fontsource/onest/latin-700.css';
+@import '@fontsource/jetbrains-mono/cyrillic-400.css';
+@import '@fontsource/jetbrains-mono/latin-400.css';
+@import '@fontsource/jetbrains-mono/cyrillic-500.css';
+@import '@fontsource/jetbrains-mono/latin-500.css';
+
+:root {
+  --concrete: #e9e8e4;   /* фон страницы — бетон */
+  --sheet: #ffffff;      /* лист паспорта */
+  --text: #1d2329;       /* графит */
+  --muted: #5d6670;
+  --rule: #e3e5e8;
+  --rule-strong: #c9cdd2;
+  --zinc: #0b7a6b;       /* акцент — патина цинка */
+  --zinc-dark: #08604f;
+  --zinc-tint: #e8f3f1;
+
+  --f-text: 'Onest', -apple-system, 'Segoe UI', Arial, sans-serif;
+  --f-mono: 'JetBrains Mono', ui-monospace, 'Courier New', monospace;
+
+  --r: 8px;
+  --sheetw: 860px;
+  --pad: 56px;
+}
+@media (max-width: 720px) { :root { --pad: 16px; } }
+
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--concrete); color: var(--text); font: 400 16px/1.6 var(--f-text); -webkit-font-smoothing: antialiased; }
+h1, h2, h3 { margin: 0; line-height: 1.2; }
+p { margin: 0; }
+a { color: inherit; }
+svg { display: block; }
+:focus-visible { outline: 2px solid var(--zinc); outline-offset: 3px; }
+.mono { font-family: var(--f-mono); }
+
+/* лист паспорта */
+.sheet { max-width: var(--sheetw); margin: 40px auto; background: var(--sheet); border-radius: var(--r); box-shadow: 0 1px 2px rgba(29, 35, 41, 0.06), 0 12px 40px rgba(29, 35, 41, 0.08); padding: 0 var(--pad); }
+@media (max-width: 900px) { .sheet { margin: 0 auto; border-radius: 0; box-shadow: none; } }
+
+/* раздел: акцентный заголовок капсом + линия, как в резюме */
+.sec { padding: 40px 0; border-top: 1px solid var(--rule); scroll-margin-top: 16px; }
+.sec__h { font-size: 15px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--zinc); padding-bottom: 10px; margin-bottom: 24px; border-bottom: 1px solid var(--rule); }
+.sec__lead { color: var(--muted); margin: -8px 0 24px; }
+
+/* метки */
+.tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.tag { font: 500 12px/1 var(--f-mono); padding: 6px 8px; border-radius: 6px; background: #f2f3f5; color: var(--muted); border: 1px solid var(--rule); white-space: nowrap; }
+.tag--zinc { background: var(--zinc-tint); color: var(--zinc-dark); border-color: transparent; }
+
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  font: 600 14px/1 var(--f-text); padding: 10px 14px; border-radius: 6px; border: 1px solid var(--zinc);
+  cursor: pointer; text-decoration: none; white-space: nowrap; transition: background 0.15s, color 0.15s;
+}
+.btn--zinc { background: var(--zinc); color: #fff; }
+.btn--zinc:hover { background: var(--zinc-dark); border-color: var(--zinc-dark); }
+.btn--line { background: var(--zinc-tint); color: var(--zinc-dark); }
+.btn--line:hover { background: #d6ebe7; }
+.btn--big { font-size: 16px; padding: 15px 22px; }
+
+/* страницы-документы: политика, 404 */
+.legal { padding: 48px 0 56px; }
+.legal h1 { font-size: clamp(24px, 4vw, 32px); margin-bottom: 24px; }
+.legal h2 { font-size: 17px; margin: 28px 0 8px; }
+.legal p { color: #3c444c; }
+.legal a { color: var(--zinc-dark); text-underline-offset: 3px; }
+
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { transition: none !important; } }

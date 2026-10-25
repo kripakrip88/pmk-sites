@@ -1,0 +1,32 @@
+---
+// Силуэт болта по типу ГОСТ 24379.1: гайка с шайбой сверху, уровень бетона пунктиром, низ — по типу.
+interface Props { code: string }
+const { code } = Astro.props;
+const thick = code === '2.2';
+const rod: Record<string, string> = {
+  '1.1': 'M24 30V90q0 10 10 10h10',
+  '1.2': 'M24 30V76l14 14v16',
+  '2.1': 'M24 30V98',
+  '2.2': 'M24 30V98',
+  '5': 'M24 30V106',
+};
+const plate = code.startsWith('2');
+---
+<svg class="bt" viewBox="0 0 48 112" width="48" height="112" aria-hidden="true">
+  <path d="M2 34H46" stroke="var(--rule-strong)" stroke-width="1.2" stroke-dasharray="3 3" />
+  <path d="M24 4V30" stroke="currentColor" stroke-width="4" stroke-linecap="round" />
+  <path d={rod[code]} fill="none" stroke="currentColor" stroke-width={thick ? 7 : 4} stroke-linecap="round" stroke-linejoin="round" />
+  <path d="M20 6h8M20 9h8M20 12h8M20 25h8M20 28h8" stroke="var(--sheet)" stroke-width="1" />
+  <rect x="14" y="14" width="20" height="7" rx="1" fill="var(--zinc)" />
+  <rect x="10" y="21" width="28" height="3" rx="1" fill="var(--zinc)" />
+  {plate && (
+    <>
+      <rect x={thick ? 6 : 11} y="86" width={thick ? 36 : 26} height="4" rx="1" fill="var(--zinc)" />
+      <rect x="17" y="90" width="14" height="6" rx="1" fill="var(--zinc)" />
+    </>
+  )}
+</svg>
+
+<style>
+  .bt { color: var(--text); flex: none; }
+</style>

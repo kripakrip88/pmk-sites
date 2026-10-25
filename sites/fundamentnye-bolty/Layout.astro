@@ -1,0 +1,67 @@
+---
+import './styles.css';
+import Head from '../../src/components/Head.astro';
+import Logo from './Logo.astro';
+import site, { phoneHref } from '../../src/lib/site.js';
+
+interface Props { title: string; description: string; noindex?: boolean; schema?: object[] }
+const props = Astro.props;
+const home = Astro.url.pathname === '/';
+const c = site.contacts;
+const year = new Date().getFullYear();
+---
+<!doctype html>
+<html lang="ru">
+  <head>
+    <Head {...props} />
+    <meta name="theme-color" content="#e9e8e4" />
+  </head>
+  <body>
+    <div class="sheet">
+      <header class="top">
+        <a class="top__logo" href="/" aria-label={`${site.brand.name} — ${site.brand.tagline}, на главную`}><Logo /></a>
+        <div class="top__act">
+          <a class="btn btn--line" href={phoneHref} aria-label={`Позвонить: ${c.phone}`}>
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 3h4l2 5-2.5 1.5a11 11 0 0 0 6 6L16 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 5a2 2 0 0 1 2-2"/></svg>
+            <span class="top__phone">{c.phone}</span>
+          </a>
+          <a class="btn btn--zinc" href={home ? '#lead' : '/#lead'}>Рассчитать</a>
+        </div>
+      </header>
+
+      <main><slot /></main>
+
+      <footer class="ftr">
+        <div class="ftr__row">
+          <Logo small />
+          <span>{site.service} {site.cityIn}</span>
+          <a href={phoneHref}>{c.phone}</a>
+          <span>{c.hours}</span>
+        </div>
+        <div class="ftr__row ftr__fine">
+          <span>© {year} {site.brand.name}</span>
+          <a href="/politika/">Политика обработки персональных данных</a>
+          <span>Не является публичной офертой</span>
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>
+
+<style>
+  .top { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 24px 0; }
+  .top__logo { text-decoration: none; }
+  .top__act { display: flex; gap: 8px; }
+  @media (max-width: 560px) {
+    .top { padding: 14px 0; }
+    .top__phone { display: none; }
+    .top__act .btn { height: 40px; }
+    .top__act .btn--line { width: 40px; padding: 0; }
+  }
+
+  .ftr { border-top: 1px solid var(--rule); padding: 24px 0 32px; display: grid; gap: 12px; font-size: 14px; color: var(--muted); }
+  .ftr__row { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 20px; }
+  .ftr a { text-underline-offset: 3px; }
+  .ftr a:hover { color: var(--zinc-dark); }
+  .ftr__fine { font-size: 12px; }
+</style>
